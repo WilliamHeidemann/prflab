@@ -2,7 +2,7 @@
  * Kernels to be optimized for the OS&C prflab.
  * Acknowledgment: This lab is an extended version of the
  * CS:APP Performance Lab
- ********************************************************/
+ *********************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
