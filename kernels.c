@@ -53,7 +53,7 @@ void first_attempt_rotate(int dim, pixel *src, pixel *dst)
     int dim_minus_one = dim-1;
 
     for (i = 0; i < dim; i++)
-        for (j = 0; j < dim; j = j + 4) {
+        for (j = 0; j < dim; j = j + 32) {
             dst[RIDX(dim_minus_one-j-0, i, dim)] = src[RIDX(i, j+0, dim)];
             dst[RIDX(dim_minus_one-j-1, i, dim)] = src[RIDX(i, j+1, dim)];
             dst[RIDX(dim_minus_one-j-2, i, dim)] = src[RIDX(i, j+2, dim)];
@@ -86,7 +86,6 @@ void first_attempt_rotate(int dim, pixel *src, pixel *dst)
             dst[RIDX(dim_minus_one-j-29, i, dim)] = src[RIDX(i, j+29, dim)];
             dst[RIDX(dim_minus_one-j-30, i, dim)] = src[RIDX(i, j+30, dim)];
             dst[RIDX(dim_minus_one-j-31, i, dim)] = src[RIDX(i, j+31, dim)];
-
         }
 
 }
