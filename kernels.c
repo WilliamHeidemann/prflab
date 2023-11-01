@@ -143,11 +143,13 @@ void transpose_then_exchange_rows(int dim, pixel *src, pixel *dst)
 
     for (i = 0; i < dim; i++)
         for (j = 0; j < dim; j++)
-            aux[RIDX(0,0,0)] =
+            aux[RIDX(i,j,dim)] = src[RIDX(j,i,dim)];
 
-
-
-            dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+    for (i = 0; i < dim; i++) {
+        for (j = 0; j < dim; j++) {
+            dst[RIDX(i,j,dim)] = aux[i + j];
+        }
+    }
 }
 
 
