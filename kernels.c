@@ -45,6 +45,23 @@ void naive_rotate(int dim, pixel *src, pixel *dst)
 	    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
 }
 
+char first_attempt_rotate_descr[] = "First attempt";
+void first_attempt_rotate(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    int dim_minus_one = dim-1;
+
+    for (i = 0; i < dim; i++)
+        for (j = 0; j < dim; j = j + 4) {
+            dst[RIDX(dim_minus_one-j, i, dim)] = src[RIDX(i, j, dim)];
+            dst[RIDX(dim_minus_one-j+1, i, dim)] = src[RIDX(i, j+1, dim)];
+            dst[RIDX(dim_minus_one-j+2, i, dim)] = src[RIDX(i, j+2, dim)];
+            dst[RIDX(dim_minus_one-j+3, i, dim)] = src[RIDX(i, j+3, dim)];
+        }
+
+}
+
 /* 
  * rotate - Your current working version of rotate
  * IMPORTANT: This is the version you will be graded on
@@ -63,6 +80,7 @@ void rotate(int dim, pixel *src, pixel *dst)
 void register_rotate_functions() 
 {
     add_rotate_function(&rotate, rotate_descr);
+    add_rotate_function(&first_attempt_rotate, first_attempt_rotate_descr);
     /* ... Register additional test functions here */
 }
 
