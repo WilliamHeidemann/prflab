@@ -222,6 +222,7 @@ void register_rotate_functions()
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
     add_rotate_function(&more_writes_pr_inner_loop2, more_writes_pr_inner_loop2descr);
+    add_rotate_function(&more_writes_pr_inner_loop3, more_writes_pr_inner_loop3descr);
     /* ... Register additional test functions here */
 }
 
