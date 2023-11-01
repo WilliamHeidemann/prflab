@@ -45,8 +45,8 @@ void naive_rotate(int dim, pixel *src, pixel *dst)
 	    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
 }
 
-char first_attempt_rotate_descr[] = "First attempt";
-void first_attempt_rotate(int dim, pixel *src, pixel *dst)
+char more_writes_pr_inner_loopdescr[] = "more_writes_pr_inner_loop";
+void more_writes_pr_inner_loop(int dim, pixel *src, pixel *dst)
 {
     int i, j;
 
@@ -87,8 +87,69 @@ void first_attempt_rotate(int dim, pixel *src, pixel *dst)
             dst[RIDX(dim_minus_one-j-30, i, dim)] = src[RIDX(i, j+30, dim)];
             dst[RIDX(dim_minus_one-j-31, i, dim)] = src[RIDX(i, j+31, dim)];
         }
-
 }
+
+char more_writes_pr_inner_loop2descr[] = "more_writes_pr_inner_loop and no call to RIDX";
+void more_writes_pr_inner_loop2(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    int dim_minus_one = dim-1;
+
+    for (i = 0; i < dim; i++)
+        for (j = 0; j < dim; j = j + 32) {
+            dst[dim_minus_one-j-0 * i + dim] = src[i * (j+0) + dim];
+            dst[dim_minus_one-j-1 * i + dim] = src[i * (j+1) + dim];
+            dst[dim_minus_one-j-2 * i + dim] = src[i * (j+2) + dim];
+            dst[dim_minus_one-j-3 * i + dim] = src[i * (j+3) + dim];
+            dst[dim_minus_one-j-4 * i + dim] = src[i * (j+4) + dim];
+            dst[dim_minus_one-j-5 * i + dim] = src[i * (j+5) + dim];
+            dst[dim_minus_one-j-6 * i + dim] = src[i * (j+6) + dim];
+            dst[dim_minus_one-j-7 * i + dim] = src[i * (j+7) + dim];
+            dst[dim_minus_one-j-8 * i + dim] = src[i * (j+8) + dim];
+            dst[dim_minus_one-j-9 * i + dim] = src[i * (j+9) + dim];
+            dst[dim_minus_one-j-10 * i + dim] = src[i * (j+10) + dim];
+            dst[dim_minus_one-j-11 * i + dim] = src[i * (j+11) + dim];
+            dst[dim_minus_one-j-12 * i + dim] = src[i * (j+12) + dim];
+            dst[dim_minus_one-j-13 * i + dim] = src[i * (j+13) + dim];
+            dst[dim_minus_one-j-14 * i + dim] = src[i * (j+14) + dim];
+            dst[dim_minus_one-j-15 * i + dim] = src[i * (j+15) + dim];
+            dst[dim_minus_one-j-16 * i + dim] = src[i * (j+16) + dim];
+            dst[dim_minus_one-j-17 * i + dim] = src[i * (j+17) + dim];
+            dst[dim_minus_one-j-18 * i + dim] = src[i * (j+18) + dim];
+            dst[dim_minus_one-j-19 * i + dim] = src[i * (j+19) + dim];
+            dst[dim_minus_one-j-20 * i + dim] = src[i * (j+20) + dim];
+            dst[dim_minus_one-j-21 * i + dim] = src[i * (j+21) + dim];
+            dst[dim_minus_one-j-22 * i + dim] = src[i * (j+22) + dim];
+            dst[dim_minus_one-j-23 * i + dim] = src[i * (j+23) + dim];
+            dst[dim_minus_one-j-24 * i + dim] = src[i * (j+24) + dim];
+            dst[dim_minus_one-j-25 * i + dim] = src[i * (j+25) + dim];
+            dst[dim_minus_one-j-26 * i + dim] = src[i * (j+26) + dim];
+            dst[dim_minus_one-j-27 * i + dim] = src[i * (j+27) + dim];
+            dst[dim_minus_one-j-28 * i + dim] = src[i * (j+28) + dim];
+            dst[dim_minus_one-j-29 * i + dim] = src[i * (j+29) + dim];
+            dst[dim_minus_one-j-30 * i + dim] = src[i * (j+30) + dim];
+            dst[dim_minus_one-j-31 * i + dim] = src[i * (j+31) + dim];
+        }
+}
+
+
+char transpose_then_exchange_rows_descr[] = "transpose_then_exchange_rows";
+void transpose_then_exchange_rows(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    pixel aux[dim*dim];
+
+    for (i = 0; i < dim; i++)
+        for (j = 0; j < dim; j++)
+            aux[RIDX(0,0,0)] =
+
+
+
+            dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+}
+
 
 /* 
  * rotate - Your current working version of rotate
@@ -108,7 +169,8 @@ void rotate(int dim, pixel *src, pixel *dst)
 void register_rotate_functions() 
 {
     add_rotate_function(&rotate, rotate_descr);
-    add_rotate_function(&first_attempt_rotate, first_attempt_rotate_descr);
+    add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
+    add_rotate_function(&more_writes_pr_inner_loop2, more_writes_pr_inner_loop2descr);
     /* ... Register additional test functions here */
 }
 
