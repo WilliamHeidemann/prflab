@@ -201,6 +201,44 @@ void transpose_then_exchange_rows(int dim, pixel *src, pixel *dst)
     }
 }*/
 
+char four_writes_pr_inner_loopdescr[] = "four_writes_pr_inner_loop";
+void four_writes_pr_inner_loop(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    int dim_minus_one = dim-1;
+
+    for (i = 0; i < dim; i++) {
+        for (j = 0; j < dim; j = j + 4) {
+            dst[(dim_minus_one-j-0) * dim + i] = src[i * dim + (j+0)];
+            dst[(dim_minus_one-j-1) * dim + i] = src[i * dim + (j+1)];
+            dst[(dim_minus_one-j-2) * dim + i] = src[i * dim + (j+2)];
+            dst[(dim_minus_one-j-3) * dim + i] = src[i * dim + (j+3)];
+        }
+    }
+}
+
+char four_writes_pr_inner_loop2descr[] = "four_writes_pr_inner_loop and i*dim pre-calc";
+void four_writes_pr_inner_loop2(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    int dim_minus_one = dim-1;
+
+    for (i = 0; i < dim; i++) {
+        int idim = i * dim;
+        for (j = 0; j < dim; j = j + 4) {
+            int j0 = j+0;
+            int j1 = j+1;
+            int j2 = j+2;
+            int j3 = j+3;
+            dst[(dim_minus_one-j0) * dim + i] = src[idim + (j0)];
+            dst[(dim_minus_one-j1) * dim + i] = src[idim + (j1)];
+            dst[(dim_minus_one-j2) * dim + i] = src[idim + (j2)];
+            dst[(dim_minus_one-j3) * dim + i] = src[idim + (j3)];
+        }
+    }
+}
 
 /* 
  * rotate - Your current working version of rotate
@@ -223,6 +261,8 @@ void register_rotate_functions()
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
     add_rotate_function(&more_writes_pr_inner_loop2, more_writes_pr_inner_loop2descr);
     add_rotate_function(&more_writes_pr_inner_loop3, more_writes_pr_inner_loop3descr);
+    add_rotate_function(&four_writes_pr_inner_loop, four_writes_pr_inner_loopdescr);
+    add_rotate_function(&four_writes_pr_inner_loop2, four_writes_pr_inner_loop2descr);
     /* ... Register additional test functions here */
 }
 
