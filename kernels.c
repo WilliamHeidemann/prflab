@@ -240,6 +240,32 @@ void four_writes_pr_inner_loop2(int dim, pixel *src, pixel *dst)
     }
 }
 
+char xor_first_descr[] = "Swap using xor";
+
+void xor(pixel *ptr, pixel *ptr1);
+
+void xor_first(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    for (i = 0; i < dim; i++)
+        for (j = i + 1; j < dim; j++){
+            pixel px1 = src[RIDX(i, j, dim)];
+            pixel px2 = dst[RIDX(dim-1-j, i, dim)];
+            xor(&px1, &px2);
+            xor(&px2, &px1);
+            xor(&px1, &px2);
+        }
+
+}
+
+void xor(pixel *px1, pixel *px2) {
+    px1->red = px1->red ^ px2->red;
+    px1->green = px1->green ^ px2->green;
+    px1->blue = px1->blue ^ px2->blue;
+    px1->alpha = px1->alpha ^ px2->alpha;
+}
+
 /* 
  * rotate - Your current working version of rotate
  * IMPORTANT: This is the version you will be graded on
@@ -263,6 +289,7 @@ void register_rotate_functions()
     add_rotate_function(&more_writes_pr_inner_loop3, more_writes_pr_inner_loop3descr);
     add_rotate_function(&four_writes_pr_inner_loop, four_writes_pr_inner_loopdescr);
     add_rotate_function(&four_writes_pr_inner_loop2, four_writes_pr_inner_loop2descr);
+    add_rotate_function(&xor_first, xor_first_descr);
     /* ... Register additional test functions here */
 }
 
