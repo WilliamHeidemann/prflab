@@ -251,16 +251,17 @@ void xor_first(int dim, pixel *src, pixel *dst)
     for (i = 0; i < dim; i++)
         for (j = i + 1; j < dim; j++){
             pixel px1 = src[RIDX(i, j, dim)];
-            pixel px2 = src[RIDX(dim-1-j, i, dim)];
+            pixel px2 = src[RIDX(j, i, dim)];
             xor(&px1, &px2);
             xor(&px2, &px1);
             xor(&px1, &px2);
         }
 
+    int dim_m_one = dim-1;
     for (i = 0; i < dim; i++){
         int dimi = dim * i;
         for (j = 0; j < dim; j++){
-            dst[dimi + j] = src[dimi + j];
+            dst[dimi + j] = src[dim_m_one-dimi + j];
         }
     }
 
