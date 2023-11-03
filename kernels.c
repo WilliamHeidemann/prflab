@@ -261,7 +261,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
     for (i = 0; i < dim; i++){
         int dimi = dim * i;
         for (j = 0; j < dim; j++){
-            dst[dimi + j] = src[dim_m_one-dimi + j];
+            dst[dimi + j] = src[dim_m_one-i + j];
         }
     }
 
