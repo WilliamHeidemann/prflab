@@ -370,16 +370,28 @@ void xor(pixel *px1, pixel *px2);
 
 void xor_first(int dim, pixel *src, pixel *dst)
 {
+    int dim_m_one = dim-1;
+
+    pixel px = src[RIDX(0,0,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = src[RIDX(dim_m_one,0,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = src[RIDX(dim_m_one,dim_m_one,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = src[RIDX(0,dim_m_one,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
     int i, j;
 
     // Flip on y-axis
-    int dim_m_one = dim-1;
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim; j++){
             dst[RIDX(i, j, dim)] = src[RIDX(i, dim_m_one - j, dim)];
         }
     }
-
 
     // Transpose using xor
     for (i = 0; i < dim; i++){
@@ -392,14 +404,20 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
+    px = dst[RIDX(0,0,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = dst[RIDX(dim_m_one,0,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = dst[RIDX(dim_m_one,dim_m_one,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = dst[RIDX(0,dim_m_one,dim)];
+    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 }
 
 void xor(pixel *px1, pixel *px2) {
-    pixel temp = *px1;
-    *px1 = *px2;
-    *px2 = temp;
-
-    return;
     px1->red ^= px2->red;
     px1->green ^= px2->green;
     px1->blue ^= px2->blue;
