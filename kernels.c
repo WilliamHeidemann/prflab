@@ -266,40 +266,12 @@ void more_writes_pr_inner_loop6(int dim, pixel *src, pixel *dst)
     for (i = 0; i < dim; i++) {
         int idim = i * dim;
         for (j = 0; j < dim; j = j + 16) {
-            int dim_minus_one_minus_j = dim_minus_one - j;
-            int dim_minus_one_minus_j_times_dim_plus_i = dim_minus_one_minus_j * dim + i;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
-            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
-            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            int idimj = idim + j;
+            int acc = (dim_minus_one-j) * dim + i;
+            for (int k = 0; k < 16; ++k) {
+                dst[acc] = src[idimj + k];
+                acc -= dim;
+            }
         }
     }
 }
