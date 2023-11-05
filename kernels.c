@@ -426,6 +426,11 @@ void xor_first(int dim, pixel *src, pixel *dst)
 }
 
 void xor(pixel *px1, pixel *px2) {
+    pixel temp = *px1; // Create a temporary copy of px1
+    *px1 = *px2;      // Copy px2 into px1
+    *px2 = temp;      // Copy the temporary value (original px1) into px2
+    return;
+
     px1->red ^= px2->red;
     px1->green ^= px2->green;
     px1->blue ^= px2->blue;
