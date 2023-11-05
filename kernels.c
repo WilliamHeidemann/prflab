@@ -516,7 +516,7 @@ void xor5(int dim, pixel *src, pixel *dst){
     int idx;
     for (idx = 0; idx < dimdim; idx += dim * 2){
         memcpy(&dst[idx], &src[dimdim - dim - idx], row_size);
-        memcpy(&dst[idx + dim], &src[dimdim - idx], row_size);
+        memcpy(&dst[idx + dim], &src[dimdim - dim - dim - idx], row_size);
     }
 
     // Transpose diagonal / using temp
