@@ -521,12 +521,12 @@ void xor5(int dim, pixel *src, pixel *dst){
 
     // Transpose diagonal / using temp
     for (i = 0; i < dim; i++){
-        int dimij = dim * i + j;
-        int dim_m_one_m_i = dim_m_one - i;
         for (j = 0; j < dim - i - 1; j++){
-            pixel temp = dst[dimij];
-            dst[dimij] = dst[(dim_m_one - j) * dim + dim_m_one_m_i];
-            dst[(dim_m_one - j) * dim + dim_m_one_m_i] = temp;
+            int a = i * dim + j;
+            int b = (dim_m_one - j) * dim + dim_m_one - i;
+            pixel temp = dst[a];
+            dst[a] = dst[b];
+            dst[b] = temp;
         }
     }
 }
