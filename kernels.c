@@ -382,7 +382,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
 
     // Transpose using xor
     for (i = 0; i < dim; i++){
-        for (j = i + 1; j < dim; j++){
+        for (j = dim_m_one; j > i; j--){
             pixel px1 = dst[RIDX(i, j, dim)];
             pixel px2 = dst[RIDX(j, i, dim)];
             xor(&px1, &px2);
@@ -428,7 +428,7 @@ void register_rotate_functions()
     add_rotate_function(&more_writes_pr_inner_loop4, more_writes_pr_inner_loop4descr);
     add_rotate_function(&more_writes_pr_inner_loop5, more_writes_pr_inner_loop5descr);
     add_rotate_function(&more_writes_pr_inner_loop6, more_writes_pr_inner_loop6descr);
-    /* ... Register additional test functions here */
+     */
 }
 
 /******************************************************************************
