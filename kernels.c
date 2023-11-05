@@ -472,7 +472,7 @@ void xor3(int dim, pixel *src, pixel *dst){
         memcpy(&dst[RIDX(i, 0, dim)], &src[RIDX(dim_m_one - i, 0, dim)], row_size);
     }
 
-    // Transpose / using xor
+    // Transpose diagonal / using xor
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim - i - 1; j++){
             pixel *px1 = &dst[RIDX(i, j, dim)];
@@ -480,6 +480,27 @@ void xor3(int dim, pixel *src, pixel *dst){
             xor(px1, px2);
             xor(px2, px1);
             xor(px1, px2);
+        }
+    }
+}
+
+char xor4desc[] = "xor with temp variable";
+void xor4(int dim, pixel *src, pixel *dst){
+    int dim_m_one = dim-1;
+    int i, j;
+    size_t row_size = sizeof(pixel) * dim;
+
+    // Flip on x-axis
+    for (i = 0; i < dim; i++){
+        memcpy(&dst[RIDX(i, 0, dim)], &src[RIDX(dim_m_one - i, 0, dim)], row_size);
+    }
+
+    // Transpose diagonal / using temp
+    for (i = 0; i < dim; i++){
+        for (j = 0; j < dim - i - 1; j++){
+            pixel temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
         }
     }
 }
