@@ -387,7 +387,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
 */
     int i, j;
 
-    // Flip on y-axis
+    // Flip on y|axis
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim; j++){
             dst[RIDX(i, j, dim)] = src[RIDX(i, dim_m_one - j, dim)];
@@ -451,7 +451,7 @@ void xor2(int dim, pixel *src, pixel *dst) {
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim - i; j++){
             pixel *px1 = &dst[RIDX(i, j, dim)];
-            pixel *px2 = &dst[RIDX(dim_m_one - i, dim_m_one - j, dim)];
+            pixel *px2 = &dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
             xor(px1, px2);
             xor(px2, px1);
             xor(px1, px2);
