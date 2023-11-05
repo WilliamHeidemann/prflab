@@ -367,15 +367,12 @@ char xor_first_descr[] = "Swap using xor";
 
 void xor(pixel *px1, pixel *px2);
 
-void print_image(int dim, pixel *src);
 
 void xor_first(int dim, pixel *src, pixel *dst)
 {
-    print_image(dim, src);
-
     int i, j;
 
-    // Flip on x-axis
+    // Flip on y-axis
     int dim_m_one = dim-1;
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim; j++){
@@ -394,15 +391,6 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
-    print_image(dim, dst);
-}
-
-void print_image(int dim, pixel *image) {
-    for (int i = 0; i < dim; ++i) {
-        for (int j = 0; j < dim; ++j) {
-            printf(image[i,j].green);
-        }
-    }
 }
 
 void xor(pixel *px1, pixel *px2) {
