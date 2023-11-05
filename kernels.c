@@ -505,6 +505,29 @@ void xor4(int dim, pixel *src, pixel *dst){
     }
 }
 
+char xor5desc[] = "flip then transpose with loop unrolling";
+void xor5(int dim, pixel *src, pixel *dst){
+    int dim_m_one = dim-1;
+    int i, j;
+    size_t row_size = sizeof(pixel) * dim;
+
+    // Flip on x-axis
+    int dimdim = dim * dim;
+    int idx;
+    for (idx = 0; idx < dimdim; idx += dim){
+        memcpy(&dst[idx], &src[RIDX(dim_m_one - idx, 0, dim)], row_size);
+    }
+
+    // Transpose diagonal / using temp
+    for (i = 0; i < dim; i++){
+        for (j = 0; j < dim - i - 1; j++){
+            pixel temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+        }
+    }
+}
+
 void print_corners(pixel *src, int dim) {
     printf("\n");
     pixel px = src[RIDX(0,0,dim)];
