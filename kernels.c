@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "defs.h"
 #include "smooth.h" // helper functions for naive_smooth
 #include "blend.h"  // helper functions for naive_blend
@@ -435,14 +436,10 @@ void xor(pixel *px1, pixel *px2) {
     px1->alpha ^= px2->alpha;
 }
 
-char xor2desc[] = "Xor and memcpy";
+char xor2desc[] = "Xor x-flip and / transpose";
 void xor2(int dim, pixel *src, pixel *dst) {
     int dim_m_one = dim-1;
     int i, j;
-
-    size_t row_size = sizeof(pixel) * dim;
-
-    print_corners(src, dim);
 
     // Flip on x-axis
     for (i = 0; i < dim; i++){
@@ -450,7 +447,6 @@ void xor2(int dim, pixel *src, pixel *dst) {
             dst[RIDX(i, j, dim)] = src[RIDX(dim_m_one - i, j, dim)];
         }
     }
-
 
     // Transpose / using xor
     for (i = 0; i < dim; i++){
@@ -463,9 +459,29 @@ void xor2(int dim, pixel *src, pixel *dst) {
         }
     }
 
-    print_corners(dst, dim);
+}
 
+char xor3desc[] = "xor with memcpy";
+void xor3(int dim, pixel *src, pixel *dst){
+    int dim_m_one = dim-1;
+    int i, j;
+    size_t row_size = sizeof(pixel) * dim;
 
+    // Flip on x-axis
+    for (i = 0; i < dim; i++){
+        memcpy(&dst[i * dim], &src[dim - i - i * dim], row_size);
+    }
+
+    // Transpose / using xor
+    for (i = 0; i < dim; i++){
+        for (j = 0; j < dim - i - 1; j++){
+            pixel *px1 = &dst[RIDX(i, j, dim)];
+            pixel *px2 = &dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            xor(px1, px2);
+            xor(px2, px1);
+            xor(px1, px2);
+        }
+    }
 }
 
 void print_corners(pixel *src, int dim) {
