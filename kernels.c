@@ -380,7 +380,6 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
-    return;
 
     // Transpose using xor
     for (i = 0; i < dim; i++){
@@ -396,6 +395,11 @@ void xor_first(int dim, pixel *src, pixel *dst)
 }
 
 void xor(pixel *px1, pixel *px2) {
+    pixel temp = *px1;
+    *px1 = *px2;
+    *px2 = temp;
+
+    return;
     px1->red ^= px2->red;
     px1->green ^= px2->green;
     px1->blue ^= px2->blue;
