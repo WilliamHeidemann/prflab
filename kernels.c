@@ -523,44 +523,9 @@ void xor5(int dim, pixel *src, pixel *dst){
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim - i - 1; j++){
             pixel temp;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
-
-            j++;
-            temp = dst[RIDX(i, j, dim)];
-            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
-            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+            temp = dst[i * dim + j];
+            dst[i * dim + j] = dst[(dim_m_one - j) * dim + dim_m_one - i];
+            dst[(dim_m_one - j) * dim + dim_m_one - i] = temp;
         }
     }
 }
