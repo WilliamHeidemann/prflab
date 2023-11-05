@@ -375,7 +375,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
     int dim_m_one = dim-1;
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim; j++){
-            dst[RIDX(i, j, dim)] = src[RIDX(dim_m_one - i, j, dim)];
+            dst[RIDX(i, j, dim)] = src[RIDX(i, dim_m_one - j, dim)];
         }
     }
 
