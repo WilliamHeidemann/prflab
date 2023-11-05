@@ -371,7 +371,7 @@ void xor(pixel *px1, pixel *px2);
 void xor_first(int dim, pixel *src, pixel *dst)
 {
     int dim_m_one = dim-1;
-
+/*
     printf("SRC:\n\n");
     pixel px = src[RIDX(0,0,dim)];
     printf("up left Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
@@ -384,7 +384,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
 
     px = src[RIDX(0,dim_m_one,dim)];
     printf("up right Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
-
+*/
     int i, j;
 
     // Flip on y-axis
@@ -404,7 +404,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
             xor(px1, px2);
         }
     }
-
+/*
     printf("DST:\n\n");
     px = dst[RIDX(0,0,dim)];
     printf("up left Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
@@ -417,6 +417,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
 
     px = dst[RIDX(0,dim_m_one,dim)];
     printf("up right Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+*/
 }
 
 void xor(pixel *px1, pixel *px2) {
@@ -431,6 +432,32 @@ void xor(pixel *px1, pixel *px2) {
     px1->blue ^= px2->blue;
     px1->alpha ^= px2->alpha;
 }
+
+char xor2desc[] = "Xor and memcpy";
+void xor2(int dim, pixel *src, pixel *dst) {
+    int dim_m_one = dim-1;
+    int i, j;
+
+    size_t row_size = sizeof(pixel) * dim;
+
+    // Flip on x-axis
+    for (i = 0; i < dim; i++){
+        for (j = 0; j < dim; j++){
+            dst[RIDX(i, j, dim)] = src[RIDX(dim_m_one - i, j, dim)];
+        }
+    }
+
+    // Transpose using xor
+    for (i = 0; i < dim; i++){
+        for (j = i + 1; j < dim; j++){
+            pixel *px1 = &dst[RIDX(i, j, dim)];
+            pixel *px2 = &dst[RIDX(j, i, dim)];
+            xor(px1, px2);
+            xor(px2, px1);
+            xor(px1, px2);
+        }
+    }
+};
 
 /* 
  * rotate - Your current working version of rotate
