@@ -451,6 +451,8 @@ void xor2(int dim, pixel *src, pixel *dst) {
         }
     }
 
+    print_corners(dst, dim);
+
     // Transpose / using xor
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim - i; j++){
@@ -462,7 +464,6 @@ void xor2(int dim, pixel *src, pixel *dst) {
         }
     }
 
-    print_corners(dst, dim);
 }
 
 void print_corners(pixel *src, int dim) {
