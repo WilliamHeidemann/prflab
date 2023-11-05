@@ -380,11 +380,13 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
+    return;
+
     // Transpose using xor
     for (i = 0; i < dim; i++){
         for (j = dim_m_one; j > i; j--){
-            pixel px2 = dst[RIDX(i, j, dim)];
-            pixel px1 = dst[RIDX(j, i, dim)];
+            pixel px1 = dst[RIDX(i, j, dim)];
+            pixel px2 = dst[RIDX(j, i, dim)];
             xor(&px1, &px2);
             xor(&px2, &px1);
             xor(&px1, &px2);
