@@ -520,7 +520,7 @@ void xor5(int dim, pixel *src, pixel *dst){
     }
 
     // Transpose diagonal / using temp
-    for (i = 0; i < dim; i++){
+    for (i = 0; i < dim / 2; i++){
         for (j = 0; j < dim - i - 1; j++){
             int a = i * dim + j;
             int b = (dim_m_one - j) * dim + dim_m_one - i;
