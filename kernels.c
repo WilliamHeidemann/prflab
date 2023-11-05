@@ -518,6 +518,7 @@ void register_rotate_functions()
 {
     add_rotate_function(&xor_first, xor_first_descr);
     add_rotate_function(&xor2, xor2desc);
+    add_rotate_function(&xor3, xor3desc);
     /*
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
