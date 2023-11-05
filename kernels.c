@@ -368,6 +368,8 @@ char xor_first_descr[] = "Swap using xor";
 void xor(pixel *px1, pixel *px2);
 
 
+void print_corners(pixel *src, int dim);
+
 void xor_first(int dim, pixel *src, pixel *dst)
 {
     int dim_m_one = dim-1;
@@ -440,6 +442,8 @@ void xor2(int dim, pixel *src, pixel *dst) {
 
     size_t row_size = sizeof(pixel) * dim;
 
+    print_corners(src, dim);
+
     // Flip on x-axis
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim; j++){
@@ -457,6 +461,23 @@ void xor2(int dim, pixel *src, pixel *dst) {
             xor(px1, px2);
         }
     }
+
+    print_corners(dst, dim);
+}
+
+void print_corners(pixel *src, int dim) {
+    printf("\n");
+    pixel px = src[RIDX(0,0,dim)];
+    printf("up left Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = src[RIDX(dim - 1,0,dim)];
+    printf("down left Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = src[RIDX(dim - 1, dim - 1,dim)];
+    printf("down right Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+
+    px = src[RIDX(0, dim - 1,dim)];
+    printf("up right Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 };
 
 /* 
