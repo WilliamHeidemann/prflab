@@ -226,6 +226,35 @@ void more_writes_pr_inner_loop4(int dim, pixel *src, pixel *dst)
     }
 }
 
+char more_writes_pr_inner_loop5descr[] = "more_writes_pr_inner_loop5 16 times";
+void more_writes_pr_inner_loop5(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    int dim_minus_one = dim-1;
+
+    for (i = 0; i < dim; i++) {
+        int idim = i * dim;
+        for (j = 0; j < dim; j = j + 16) {
+            dst[(dim_minus_one-j-0) * dim + i] = src[idim + (j+0)];
+            dst[(dim_minus_one-j-1) * dim + i] = src[idim + (j+1)];
+            dst[(dim_minus_one-j-2) * dim + i] = src[idim + (j+2)];
+            dst[(dim_minus_one-j-3) * dim + i] = src[idim + (j+3)];
+            dst[(dim_minus_one-j-4) * dim + i] = src[idim + (j+4)];
+            dst[(dim_minus_one-j-5) * dim + i] = src[idim + (j+5)];
+            dst[(dim_minus_one-j-6) * dim + i] = src[idim + (j+6)];
+            dst[(dim_minus_one-j-7) * dim + i] = src[idim + (j+7)];
+            dst[(dim_minus_one-j-8) * dim + i] = src[idim + (j+8)];
+            dst[(dim_minus_one-j-9) * dim + i] = src[idim + (j+9)];
+            dst[(dim_minus_one-j-10) * dim + i] = src[idim + (j+10)];
+            dst[(dim_minus_one-j-11) * dim + i] = src[idim + (j+11)];
+            dst[(dim_minus_one-j-12) * dim + i] = src[idim + (j+12)];
+            dst[(dim_minus_one-j-13) * dim + i] = src[idim + (j+13)];
+            dst[(dim_minus_one-j-14) * dim + i] = src[idim + (j+14)];
+            dst[(dim_minus_one-j-15) * dim + i] = src[idim + (j+15)];
+        }
+    }
+}
 
 /*char transpose_then_exchange_rows_descr[] = "transpose_then_exchange_rows";
 void transpose_then_exchange_rows(int dim, pixel *src, pixel *dst)
@@ -346,6 +375,7 @@ void register_rotate_functions()
     add_rotate_function(&four_writes_pr_inner_loop2, four_writes_pr_inner_loop2descr);
     add_rotate_function(&xor_first, xor_first_descr);
     add_rotate_function(&more_writes_pr_inner_loop4, more_writes_pr_inner_loop4descr);
+    add_rotate_function(&more_writes_pr_inner_loop5, more_writes_pr_inner_loop5descr);
     /* ... Register additional test functions here */
 }
 
