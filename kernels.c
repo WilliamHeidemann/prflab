@@ -514,11 +514,8 @@ void xor5(int dim, pixel *src, pixel *dst){
     // Flip on x-axis
     int dimdim = dim * dim;
     int idx;
-    for (idx = 0; idx < dimdim; idx += dim * 4){
+    for (idx = 0; idx < dimdim; idx += dim){
         memcpy(&dst[idx], &src[dimdim - dim - idx], row_size);
-        memcpy(&dst[idx + dim], &src[dimdim - dim - dim - idx], row_size);
-        memcpy(&dst[idx + dim + dim], &src[dimdim - dim - dim - dim - idx], row_size);
-        memcpy(&dst[idx + dim + dim + dim], &src[dimdim - dim - dim - dim -dim -idx], row_size);
     }
 
     // Transpose diagonal / using temp
