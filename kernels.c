@@ -372,7 +372,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
 {
     int dim_m_one = dim-1;
 
-    printf("SRC:");
+    printf("SRC:\n\n");
     pixel px = src[RIDX(0,0,dim)];
     printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
@@ -405,7 +405,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
-    printf("DST:");
+    printf("DST:\n\n");
     px = dst[RIDX(0,0,dim)];
     printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
