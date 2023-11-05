@@ -383,7 +383,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
     printf("down right Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = src[RIDX(0,dim_m_one,dim)];
-    printf("up left Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("up right Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     int i, j;
 
@@ -394,6 +394,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
+    /*
     // Transpose using xor
     for (i = 0; i < dim; i++){
         for (j = i + 1; j < dim; j++){
@@ -404,6 +405,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
             xor(&px1, &px2);
         }
     }
+     */
 
     printf("DST:\n\n");
     px = dst[RIDX(0,0,dim)];
