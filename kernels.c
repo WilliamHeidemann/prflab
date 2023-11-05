@@ -367,8 +367,12 @@ char xor_first_descr[] = "Swap using xor";
 
 void xor(pixel *px1, pixel *px2);
 
+void print_image(int dim, pixel *src);
+
 void xor_first(int dim, pixel *src, pixel *dst)
 {
+    print_image(dim, src);
+
     int i, j;
 
     // Flip on x-axis
@@ -387,6 +391,16 @@ void xor_first(int dim, pixel *src, pixel *dst)
             xor(&px1, &px2);
             xor(&px2, &px1);
             xor(&px1, &px2);
+        }
+    }
+
+    print_image(dim, dst);
+}
+
+void print_image(int dim, pixel *image) {
+    for (int i = 0; i < dim; ++i) {
+        for (int j = 0; j < dim; ++j) {
+            printf(image[i,j].green);
         }
     }
 }
@@ -415,13 +429,14 @@ void rotate(int dim, pixel *src, pixel *dst)
  */
 void register_rotate_functions() 
 {
+    add_rotate_function(&xor_first, xor_first_descr);
+    /*
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
     add_rotate_function(&more_writes_pr_inner_loop2, more_writes_pr_inner_loop2descr);
     add_rotate_function(&more_writes_pr_inner_loop3, more_writes_pr_inner_loop3descr);
     add_rotate_function(&four_writes_pr_inner_loop, four_writes_pr_inner_loopdescr);
     add_rotate_function(&four_writes_pr_inner_loop2, four_writes_pr_inner_loop2descr);
-    add_rotate_function(&xor_first, xor_first_descr);
     add_rotate_function(&more_writes_pr_inner_loop4, more_writes_pr_inner_loop4descr);
     add_rotate_function(&more_writes_pr_inner_loop5, more_writes_pr_inner_loop5descr);
     add_rotate_function(&more_writes_pr_inner_loop6, more_writes_pr_inner_loop6descr);
