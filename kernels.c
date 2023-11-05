@@ -256,6 +256,54 @@ void more_writes_pr_inner_loop5(int dim, pixel *src, pixel *dst)
     }
 }
 
+char more_writes_pr_inner_loop6descr[] = "more_writes_pr_inner_loop5 16 times even less multiply";
+void more_writes_pr_inner_loop6(int dim, pixel *src, pixel *dst)
+{
+    int i, j;
+
+    int dim_minus_one = dim-1;
+
+    for (i = 0; i < dim; i++) {
+        int idim = i * dim;
+        for (j = 0; j < dim; j = j + 16) {
+            int dim_minus_one_minus_j = dim_minus_one - j;
+            int dim_minus_one_minus_j_times_dim_plus_i = dim_minus_one_minus_j * dim + i;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+            dst[dim_minus_one_minus_j_times_dim_plus_i] = src[idim + j];
+            dim_minus_one_minus_j_times_dim_plus_i -= dim_minus_one_minus_j;
+        }
+    }
+}
+
 /*char transpose_then_exchange_rows_descr[] = "transpose_then_exchange_rows";
 void transpose_then_exchange_rows(int dim, pixel *src, pixel *dst)
 {
@@ -376,6 +424,7 @@ void register_rotate_functions()
     add_rotate_function(&xor_first, xor_first_descr);
     add_rotate_function(&more_writes_pr_inner_loop4, more_writes_pr_inner_loop4descr);
     add_rotate_function(&more_writes_pr_inner_loop5, more_writes_pr_inner_loop5descr);
+    add_rotate_function(&more_writes_pr_inner_loop6, more_writes_pr_inner_loop6descr);
     /* ... Register additional test functions here */
 }
 
