@@ -248,14 +248,15 @@ void xor_first(int dim, pixel *src, pixel *dst)
 {
     int i, j;
 
+    // Flip on x-axis
     int dim_m_one = dim-1;
     for (i = 0; i < dim; i++){
-        //int dimi = dim * i;
         for (j = 0; j < dim; j++){
-            dst[RIDX(i, j, dim)] = src[RIDX(i, dim_m_one - j, dim)];
+            dst[RIDX(i, j, dim)] = src[RIDX(dim_m_one - i, j, dim)];
         }
     }
 
+    // Transpose using xor
     for (i = 0; i < dim; i++){
         for (j = i + 1; j < dim; j++){
             pixel px1 = dst[RIDX(i, j, dim)];
@@ -268,10 +269,10 @@ void xor_first(int dim, pixel *src, pixel *dst)
 }
 
 void xor(pixel *px1, pixel *px2) {
-    px1->red = px1->red ^ px2->red;
-    px1->green = px1->green ^ px2->green;
-    px1->blue = px1->blue ^ px2->blue;
-    px1->alpha = px1->alpha ^ px2->alpha;
+    px1->red ^= px2->red;
+    px1->green ^= px2->green;
+    px1->blue ^= px2->blue;
+    px1->alpha ^= px2->alpha;
 }
 
 /* 
