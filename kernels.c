@@ -513,15 +513,52 @@ void xor5(int dim, pixel *src, pixel *dst){
 
     // Flip on x-axis
     int dimdim = dim * dim;
+    int dimdim_minus_dim = dimdim - dim;
     int idx;
     for (idx = 0; idx < dimdim; idx += dim){
-        memcpy(&dst[idx], &src[dimdim - dim - idx], row_size);
+        memcpy(&dst[idx], &src[dimdim_minus_dim - idx], row_size);
     }
 
     // Transpose diagonal / using temp
     for (i = 0; i < dim; i++){
         for (j = 0; j < dim - i - 1; j++){
-            pixel temp = dst[RIDX(i, j, dim)];
+            pixel temp;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
+            dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
+            dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
+
+            j++;
+            temp = dst[RIDX(i, j, dim)];
             dst[RIDX(i, j, dim)] = dst[RIDX(dim_m_one - j, dim_m_one - i, dim)];
             dst[RIDX(dim_m_one - j, dim_m_one - i, dim)] = temp;
         }
