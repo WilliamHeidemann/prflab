@@ -398,10 +398,16 @@ void xor_first(int dim, pixel *src, pixel *dst)
     for (i = 0; i < dim; i++){
         for (j = i + 1; j < dim; j++){
             pixel px1 = dst[RIDX(i, j, dim)];
-            pixel px2 = dst[RIDX(j, i, dim)];
-            xor(&px1, &px2);
-            xor(&px2, &px1);
-            xor(&px1, &px2);
+            //pixel px2 = dst[RIDX(j, i, dim)];
+            pixel *px2;
+            px2 = malloc(sizeof(pixel));
+            px2->red = 0;
+            px2->green = 0;
+            px2->blue = 0;
+            px2->alpha = 0;
+            xor(&px1, px2);
+            xor(px2, &px1);
+            xor(&px1, px2);
         }
     }
 
