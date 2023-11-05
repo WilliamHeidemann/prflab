@@ -469,7 +469,7 @@ void xor3(int dim, pixel *src, pixel *dst){
 
     // Flip on x-axis
     for (i = 0; i < dim; i++){
-        memcpy(&dst[i * dim], &src[dim - i - i * dim], row_size);
+        memcpy(&dst[RIDX(i, 0, dim)], &src[RIDX(dim_m_one - i, 0, dim)], row_size);
     }
 
     // Transpose / using xor
