@@ -372,17 +372,18 @@ void xor_first(int dim, pixel *src, pixel *dst)
 {
     int dim_m_one = dim-1;
 
+    printf("SRC:");
     pixel px = src[RIDX(0,0,dim)];
     printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = src[RIDX(dim_m_one,0,dim)];
-    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("i,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = src[RIDX(dim_m_one,dim_m_one,dim)];
-    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("i,j Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = src[RIDX(0,dim_m_one,dim)];
-    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("0,j Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     int i, j;
 
@@ -404,17 +405,18 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
+    printf("DST:");
     px = dst[RIDX(0,0,dim)];
     printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = dst[RIDX(dim_m_one,0,dim)];
-    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("i,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = dst[RIDX(dim_m_one,dim_m_one,dim)];
-    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("i,j Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 
     px = dst[RIDX(0,dim_m_one,dim)];
-    printf("0,0 Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
+    printf("0,j Red=%hu, Green=%hu, Blue=%hu, Alpha=%hu\n", px.red, px.green, px.blue, px.alpha);
 }
 
 void xor(pixel *px1, pixel *px2) {
