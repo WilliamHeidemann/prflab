@@ -268,10 +268,38 @@ void more_writes_pr_inner_loop6(int dim, pixel *src, pixel *dst)
         for (j = 0; j < dim; j = j + 16) {
             int idimj = idim + j;
             int acc = (dim_minus_one-j) * dim + i;
-            for (int k = 0; k < 16; ++k) {
-                dst[acc] = src[idimj + k];
-                acc -= dim;
-            }
+
+            dst[acc] = src[idimj + 0];
+            acc -= dim;
+            dst[acc] = src[idimj + 1];
+            acc -= dim;
+            dst[acc] = src[idimj + 2];
+            acc -= dim;
+            dst[acc] = src[idimj + 3];
+            acc -= dim;
+            dst[acc] = src[idimj + 4];
+            acc -= dim;
+            dst[acc] = src[idimj + 5];
+            acc -= dim;
+            dst[acc] = src[idimj + 6];
+            acc -= dim;
+            dst[acc] = src[idimj + 7];
+            acc -= dim;
+            dst[acc] = src[idimj + 8];
+            acc -= dim;
+            dst[acc] = src[idimj + 9];
+            acc -= dim;
+            dst[acc] = src[idimj + 10];
+            acc -= dim;
+            dst[acc] = src[idimj + 11];
+            acc -= dim;
+            dst[acc] = src[idimj + 12];
+            acc -= dim;
+            dst[acc] = src[idimj + 13];
+            acc -= dim;
+            dst[acc] = src[idimj + 14];
+            acc -= dim;
+            dst[acc] = src[idimj + 15];
         }
     }
 }
