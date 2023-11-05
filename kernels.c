@@ -370,6 +370,7 @@ void xor(pixel *px1, pixel *px2);
 
 void xor_first(int dim, pixel *src, pixel *dst)
 {
+    return;
     int i, j;
 
     // Flip on y-axis
