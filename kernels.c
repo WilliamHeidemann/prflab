@@ -398,8 +398,12 @@ void xor_first(int dim, pixel *src, pixel *dst)
     for (i = 0; i < dim; i++){
         for (j = i + 1; j < dim; j++){
             pixel px1 = dst[RIDX(i, j, dim)];
+            px1.blue = 0;
+            px1.green = 0;
+            px1.red = 0;
+            px1.alpha = 1;
             //pixel px2 = dst[RIDX(j, i, dim)];
-            pixel *px2;
+            /* pixel *px2;
             px2 = malloc(sizeof(pixel));
             px2->red = 0;
             px2->green = 0;
@@ -407,7 +411,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
             px2->alpha = 0;
             xor(&px1, px2);
             xor(px2, &px1);
-            xor(&px1, px2);
+            xor(&px1, px2); */
         }
     }
 
@@ -426,10 +430,11 @@ void xor_first(int dim, pixel *src, pixel *dst)
 }
 
 void xor(pixel *px1, pixel *px2) {
-    pixel temp = *px1; // Create a temporary copy of px1
+    /* pixel temp = *px1; // Create a temporary copy of px1
     *px1 = *px2;      // Copy px2 into px1
     *px2 = temp;      // Copy the temporary value (original px1) into px2
     return;
+     */
 
     px1->red ^= px2->red;
     px1->green ^= px2->green;
