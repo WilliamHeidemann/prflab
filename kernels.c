@@ -394,6 +394,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
         }
     }
 
+    /*
     // Transpose using xor
     for (i = 0; i < dim; i++){
         for (j = i + 1; j < dim; j++){
@@ -404,6 +405,7 @@ void xor_first(int dim, pixel *src, pixel *dst)
             xor(&px1, &px2);
         }
     }
+    */
 
     printf("DST:\n\n");
     px = dst[RIDX(0,0,dim)];
