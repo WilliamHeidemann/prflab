@@ -820,10 +820,10 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
     global_dst = dst;
     global_dim = dim;
 
-    int i, j;
+    int i;
     pthread_t threads[dim*dim];
     for (i = 0; i < dim / 16; i++){
-        pthread_create(&threads[i], NULL, set_pixel, (void*)&i);
+        pthread_create(&threads[i], NULL, set_pixel, (void*)&threads[i]);
     }
 
     for (i = 0; i < dim * dim; ++i) {
