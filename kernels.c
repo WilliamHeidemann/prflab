@@ -823,10 +823,9 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
             data->src = s;
             data->dst = d;
             pthread_create(&threads[s], NULL, set_pixel, (void*)&data);
-
-            //dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
         }
 
+    return;
     for (i = 0; i < dim; ++i) {
         for (j = 0; j < dim; ++j) {
             pthread_join(threads[RIDX(i, j, dim)], NULL);
