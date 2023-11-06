@@ -622,7 +622,7 @@ void b(int dim, pixel *src, pixel *dst) {
     int a_jump = dim * (dim-1) + 1;
     int a = dim * (dim - 1);
     int b = 0;
-    while (b < dimdim) {
+    while (b < dimdim - 1) {
         dst[a] = src[b];
         a += a_jump;
         b++;
