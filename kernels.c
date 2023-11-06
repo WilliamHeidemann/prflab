@@ -615,11 +615,11 @@ void a(int dim, pixel *src, pixel *dst) {
     int dim_minus_one = dim - 1;
 
     for (j = 0; j < dim; j++){
-        d_precalc = (dim_minus_one - j) * dim;
+        int d_pre = (dim_minus_one - j) * dim;
 
         for (i = 0; i < dim; i += 16){
             s_precalc = i * dim + j;
-            d_precalc += i;
+            d_precalc = d_pre + i;
             dst[d_precalc] = src[s_precalc];
             dst[d_precalc + 1] = src[s_precalc + d1];
             dst[d_precalc + 2] = src[s_precalc + d2];
