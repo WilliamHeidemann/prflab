@@ -598,12 +598,12 @@ void a(int dim, pixel *src, pixel *dst) {
     int dp1, dp2, dp3, dp4, dp5, dp6, dp7;
     int d_precalc, s_precalc;
     d1 = dim;
-    d2 = dim * 2;
-    d3 = dim * 3;
-    d4 = dim * 4;
-    d5 = dim * 5;
-    d6 = dim * 6;
-    d7 = dim * 7;
+    d2 = d1 + dim;
+    d3 = d2 + dim;
+    d4 = d3 + dim;
+    d5 = d4 + dim;
+    d6 = d5 + dim;
+    d7 = d6 + dim;
 
     for (j = 0; j < dim; j++){
         d_precalc = (dim - 1 - j) * dim;
