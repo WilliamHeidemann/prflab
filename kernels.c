@@ -624,9 +624,12 @@ void b(int dim, pixel *src, pixel *dst) {
     int a = dim * (dim - 1);
     int b = 0;
     while (b < dimdim) {
-        dst[a] = src[b];
+        for (int i = 0; i < dim; ++i) {
+            dst[a] = src[b];
+            a -= dim;
+            b++;
+        }
         a += a_jump;
-        b++;
     }
 
     print_corners(dst, dim);
