@@ -595,17 +595,21 @@ char a_desc[] = "Restart";
 void a(int dim, pixel *src, pixel *dst) {
     int i, j;
 
-    for (j = 0; j < dim; j++)
+    for (j = 0; j < dim; j++){
+        int d_precalc = (dim - 1 - j) * dim;
         for (i = 0; i < dim; i += 8){
-            dst[(dim - 1 - j) * dim + i] = src[i * dim + j];
-            dst[(dim - 1 - j) * dim + i + 1] = src[(i + 1) * dim + j];
-            dst[(dim - 1 - j) * dim + i + 2] = src[(i + 2) * dim + j];
-            dst[(dim - 1 - j) * dim + i + 3] = src[(i + 3) * dim + j];
-            dst[(dim - 1 - j) * dim + i + 4] = src[(i + 4) * dim + j];
-            dst[(dim - 1 - j) * dim + i + 5] = src[(i + 5) * dim + j];
-            dst[(dim - 1 - j) * dim + i + 6] = src[(i + 6) * dim + j];
-            dst[(dim - 1 - j) * dim + i + 7] = src[(i + 7) * dim + j];
+            int s_precalc = i * dim + j;
+
+            dst[d_precalc + i + 0] = src[s_precalc];
+            dst[d_precalc + i + 1] = src[s_precalc + dim];
+            dst[d_precalc + i + 2] = src[s_precalc + dim + dim];
+            dst[d_precalc + i + 3] = src[s_precalc + dim + dim + dim];
+            dst[d_precalc + i + 4] = src[s_precalc + dim + dim + dim + dim];
+            dst[d_precalc + i + 5] = src[s_precalc + dim + dim + dim + dim + dim];
+            dst[d_precalc + i + 6] = src[s_precalc + dim + dim + dim + dim + dim + dim];
+            dst[d_precalc + i + 7] = src[s_precalc + dim + dim + dim + dim + dim + dim + dim];
         }
+    }
 }
 
 void print_corners(pixel *src, int dim) {
