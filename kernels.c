@@ -594,21 +594,27 @@ void xor6(int dim, pixel *src, pixel *dst){
 char a_desc[] = "j in outer loop";
 void a(int dim, pixel *src, pixel *dst) {
     int i, j;
+    int d1, d2, d3, d4, d5, d6, d7;
+    d1 = dim;
+    d2 = dim * 2;
+    d3 = dim * 3;
+    d4 = dim * 4;
+    d5 = dim * 5;
+    d6 = dim * 6;
+    d7 = dim * 7;
 
     for (j = 0; j < dim; j++){
         int d_precalc = (dim - 1 - j) * dim;
-
         for (i = 0; i < dim; i += 8){
             int s_precalc = i * dim + j;
-
             dst[d_precalc + i + 0] = src[s_precalc];
             dst[d_precalc + i + 1] = src[s_precalc + dim];
-            dst[d_precalc + i + 2] = src[s_precalc + dim + dim];
-            dst[d_precalc + i + 3] = src[s_precalc + dim + dim + dim];
-            dst[d_precalc + i + 4] = src[s_precalc + dim + dim + dim + dim];
-            dst[d_precalc + i + 5] = src[s_precalc + dim + dim + dim + dim + dim];
-            dst[d_precalc + i + 6] = src[s_precalc + dim + dim + dim + dim + dim + dim];
-            dst[d_precalc + i + 7] = src[s_precalc + dim + dim + dim + dim + dim + dim + dim];
+            dst[d_precalc + i + 2] = src[s_precalc + d2];
+            dst[d_precalc + i + 3] = src[s_precalc + d3];
+            dst[d_precalc + i + 4] = src[s_precalc + d4];
+            dst[d_precalc + i + 5] = src[s_precalc + d5];
+            dst[d_precalc + i + 6] = src[s_precalc + d6];
+            dst[d_precalc + i + 7] = src[s_precalc + d7];
 
         }
     }
@@ -723,7 +729,7 @@ void print_corners(pixel *src, int dim) {
 char rotate_descr[] = "rotate: Current working version";
 void rotate(int dim, pixel *src, pixel *dst)
 {
-    naive_rotate(dim, src, dst);
+    d(dim, src, dst);
 }
 
 /*
