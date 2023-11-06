@@ -523,7 +523,7 @@ void xor5(int dim, pixel *src, pixel *dst){
     pixel temp;
     for (i = 0; i < dim; i++){
         int a = dim * i;
-        int b = (dim_m_one - 0) * dim + dim_m_one - i;
+        int b = dim_m_one * dim + dim_m_one - i;
         for (j = 0; j < dim - i - 1; j++){
             temp = dst[a];
             dst[a] = dst[b];
@@ -553,7 +553,7 @@ void xor6(int dim, pixel *src, pixel *dst){
     pixel temp;
     for (i = 0; i < dim; i++){
         int a = dim * i;
-        int b = (dim_m_one - 0) * dim + dim_m_one - i;
+        int b = dim_m_one * dim + dim_m_one - i;
         for (j = 0; j < dim - i - 1; j += 2){
             temp = dst[a];
             dst[a] = dst[b];
@@ -563,8 +563,8 @@ void xor6(int dim, pixel *src, pixel *dst){
             dst[a+1] = dst[b-dim];
             dst[b-dim] = temp;
 
-            a += 1;
-            b -= dim;
+            a += 2;
+            b -= dim * 2;
         }
     }
 }
