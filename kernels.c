@@ -606,7 +606,7 @@ void xor6(int dim, pixel *src, pixel *dst){
 
         a += dim-diagonal_index;
         b -= 1;
-        b += diagonal_index;
+        b += diagonal_index - 1;
     }
 }
 
