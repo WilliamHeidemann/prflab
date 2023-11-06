@@ -623,13 +623,13 @@ void b(int dim, pixel *src, pixel *dst) {
     while (b < dimdim) {
         for (int i = 0; i < dim; i += 8) {
             dst[a] = src[b];
-            dst[a+1] = src[b-dim];
-            dst[a+2] = src[b-dim-dim];
-            dst[a+3] = src[b-dim-dim-dim];
-            dst[a+4] = src[b-dim-dim-dim-dim];
-            dst[a+5] = src[b-dim-dim-dim-dim-dim];
-            dst[a+6] = src[b-dim-dim-dim-dim-dim-dim];
-            dst[a+7] = src[b-dim-dim-dim-dim-dim-dim-dim];
+            dst[a-dim] = src[b+1];
+            dst[a-dim-dim] = src[b+2];
+            dst[a-dim-dim-dim] = src[b+3];
+            dst[a-dim-dim-dim-dim] = src[b+4];
+            dst[a-dim-dim-dim-dim-dim] = src[b+5];
+            dst[a-dim-dim-dim-dim-dim-dim] = src[b+6];
+            dst[a-dim-dim-dim-dim-dim-dim-dim] = src[b+7];
             a -= 8 * dim;
             b += 8;
         }
