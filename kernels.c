@@ -796,7 +796,7 @@ pixel *global_src;
 pixel *global_dst;
 int global_dim;
 
-void* set_pixel(void *arg){
+void* thread_function(void *arg){
     int idx = *(int*)arg;
     int s, d;
     int block_start = 16 * idx;
@@ -821,14 +821,15 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
     global_dim = dim;
 
     int i;
-    pthread_t threads[dim * dim / 16];
-    int thread_args[dim * dim];
-    for (i = 0; i < dim * dim / 16; i++){
+    int chunk_count = dim / 16;
+    pthread_t threads[chunk_count];
+    int thread_args[chunk_count];
+    for (i = 0; i < chunk_count; i++) {
         thread_args[i] = i;
-        pthread_create(&threads[i], NULL, set_pixel, (void*)&thread_args[i]);
+        pthread_create(&threads[i], NULL, thread_function, (void *) &thread_args[i]);
     }
 
-    for (i = 0; i < dim * dim / 16; ++i) {
+    for (i = 0; i < chunk_count; ++i) {
         pthread_join(threads[i], NULL);
     }
 }
