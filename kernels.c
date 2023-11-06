@@ -640,7 +640,6 @@ void b(int dim, pixel *src, pixel *dst) {
 char c_desc[] = "src in rows, dst in columns";
 void c(int dim, pixel *src, pixel *dst) {
     int dimdim = dim * dim;
-    int b_jump = dimdim + 1;
     int b = dim * (dim - 1);
     int a = 0;
     while (a < dimdim) {
@@ -656,7 +655,7 @@ void c(int dim, pixel *src, pixel *dst) {
             b -= 8 * dim;
             a += 8;
         }
-        b += b_jump;
+        b += dimdim + 1;
     }
 }
 
