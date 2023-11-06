@@ -601,6 +601,10 @@ void a(int dim, pixel *src, pixel *dst) {
             dst[(dim - 1 - j) * dim + i + 1] = src[(i + 1) * dim + j];
             dst[(dim - 1 - j) * dim + i + 2] = src[(i + 2) * dim + j];
             dst[(dim - 1 - j) * dim + i + 3] = src[(i + 3) * dim + j];
+            dst[(dim - 1 - j) * dim + i + 4] = src[(i + 4) * dim + j];
+            dst[(dim - 1 - j) * dim + i + 5] = src[(i + 5) * dim + j];
+            dst[(dim - 1 - j) * dim + i + 6] = src[(i + 6) * dim + j];
+            dst[(dim - 1 - j) * dim + i + 7] = src[(i + 7) * dim + j];
         }
 }
 
