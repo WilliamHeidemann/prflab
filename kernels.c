@@ -803,6 +803,7 @@ typedef struct {
 void* set_pixel(void *arg){
     info *data = (info*)arg;
     global_dst[data->dst] = global_src[data->src];
+    free(data);
     return NULL;
 }
 
@@ -818,13 +819,16 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
         for (j = 0; j < dim; j++) {
             int s = RIDX(i, j, dim);
             int d = RIDX(dim-1-j, i, dim);
-            info data = {s, d};
+            info* data = (info*)malloc(sizeof(info));
+            data->src = s;
+            data->dst = d;
             pthread_create(&threads[s], NULL, set_pixel, (void*)&data);
 
             //dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
         }
+
     for (i = 0; i < dim; ++i) {
-        for (int j = 0; j < dim; ++j) {
+        for (j = 0; j < dim; ++j) {
             pthread_join(threads[RIDX(i, j, dim)], NULL);
         }
     }
