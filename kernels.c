@@ -620,7 +620,7 @@ void b(int dim, pixel *src, pixel *dst) {
     print_corners(src, dim);
 
     int dimdim = dim * dim;
-    int a_jump = dim * (dim-1) + 1;
+    int a_jump = dimdim + 1;
     int a = dim * (dim - 1);
     int b = 0;
     while (b < dimdim) {
