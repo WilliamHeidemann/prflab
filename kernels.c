@@ -505,7 +505,7 @@ void xor4(int dim, pixel *src, pixel *dst){
     }
 }
 
-char xor5desc[] = "flip then transpose with loop unrolling";
+char xor5desc[] = "flip then transpose with pre-computation";
 void xor5(int dim, pixel *src, pixel *dst){
     int dim_m_one = dim-1;
     int i, j;
@@ -521,11 +521,12 @@ void xor5(int dim, pixel *src, pixel *dst){
 
     // Transpose diagonal / using temp
     int back = dim * dim - 1;
+    pixel temp;
     for (i = 0; i < dim; i++){
         int a = dim * i;
         int b = (dim_m_one - 0) * dim + dim_m_one - i;
         for (j = 0; j < dim - i - 1; j++){
-            pixel temp = dst[a];
+            temp = dst[a];
             dst[a] = dst[b];
             dst[b] = temp;
             a += 1;
