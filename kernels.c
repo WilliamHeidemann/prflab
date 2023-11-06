@@ -525,12 +525,12 @@ void xor5(int dim, pixel *src, pixel *dst){
         int a = dim * i;
         for (j = 0; j < dim - i - 1; j++){
             //int a = dim * i + j;
-            a += 1;
             //int b = RIDX(dim_m_one - j, dim_m_one - i, dim);
             int b = (dim_m_one - j) * dim + dim_m_one - i;
             pixel temp = dst[a];
             dst[a] = dst[b];
             dst[b] = temp;
+            a += 1;
         }
     }
 }
