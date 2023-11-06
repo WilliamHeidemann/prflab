@@ -659,6 +659,33 @@ void c(int dim, pixel *src, pixel *dst) {
     }
 }
 
+char d_desc[] = "local variables";
+void d(int dim, pixel *src, pixel *dst) {
+    int i, j;
+    for (j = 0; j < dim; j += 8) {
+        int tmp1 = dim*(dim-1-j);
+        int tmp2 = tmp1 - dim;
+        int tmp3 = tmp2 - dim;
+        int tmp4 = tmp3 - dim;
+        int tmp5 = tmp4 - dim;
+        int tmp6 = tmp5 - dim;
+        int tmp7 = tmp6 - dim;
+        int tmp8 = tmp7 - dim;
+        for (i = 0; i < dim; i++) {
+            int dimx = dim*i+j;
+
+            dst[tmp1+i] = src[dimx];
+            dst[tmp2+i] = src[dimx+1];
+            dst[tmp3+i] = src[dimx+2];
+            dst[tmp4+i] = src[dimx+3];
+            dst[tmp5+i] = src[dimx+4];
+            dst[tmp6+i] = src[dimx+5];
+            dst[tmp7+i] = src[dimx+6];
+            dst[tmp8+i] = src[dimx+7];
+        }
+    }
+}
+
 void print_corners(pixel *src, int dim) {
     printf("\n");
     pixel px = src[RIDX(0,0,dim)];
@@ -702,6 +729,7 @@ void register_rotate_functions()
     add_rotate_function(&a, a_desc);
     add_rotate_function(&b, b_desc);
     add_rotate_function(&c, c_desc);
+    add_rotate_function(&d, d_desc);
     /*
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
