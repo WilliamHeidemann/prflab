@@ -618,10 +618,15 @@ char b_desc[] = "i in outer loop";
 void b(int dim, pixel *src, pixel *dst) {
     int i, j;
 
-    for (i = 0; i < dim; i++)
-        for (j = 0; j < dim; j++){
-            dst[(dim-1-j) * dim + i] = src[i * dim + j];
-        }
+    int dimdim = dim * dim;
+    int a_jump = dim * (dim-1) + 1;
+    int a = dim * (dim - 1);
+    int b = 0;
+    while (b < dimdim) {
+        dst[a] = src[b];
+        a += a_jump;
+        b++;
+    }
 }
 
 void print_corners(pixel *src, int dim) {
