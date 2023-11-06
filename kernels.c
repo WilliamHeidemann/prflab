@@ -596,7 +596,7 @@ void a(int dim, pixel *src, pixel *dst) {
     int i, j;
 
     for (j = 0; j < dim; j++)
-        for (i = 0; i < dim; i += 4){
+        for (i = 0; i < dim; i += 8){
             dst[(dim - 1 - j) * dim + i] = src[i * dim + j];
             dst[(dim - 1 - j) * dim + i + 1] = src[(i + 1) * dim + j];
             dst[(dim - 1 - j) * dim + i + 2] = src[(i + 2) * dim + j];
