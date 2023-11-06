@@ -520,7 +520,6 @@ void xor5(int dim, pixel *src, pixel *dst){
     }
 
     // Transpose diagonal / using temp
-    int back = dim * dim - 1;
     pixel temp;
     for (i = 0; i < dim; i++){
         int a = dim * i;
@@ -529,6 +528,41 @@ void xor5(int dim, pixel *src, pixel *dst){
             temp = dst[a];
             dst[a] = dst[b];
             dst[b] = temp;
+            a += 1;
+            b -= dim;
+        }
+    }
+}
+
+char xor6desc[] = "flip then transpose also loop unrolling";
+void xor6(int dim, pixel *src, pixel *dst){
+    int dim_m_one = dim-1;
+    int i, j;
+    size_t row_size = sizeof(pixel) * dim;
+
+    // Flip on x-axis
+    int dimdim = dim * dim;
+    int dimdim_minus_dim = dimdim - dim;
+    int idx;
+    for (idx = 0; idx < dimdim; idx += dim){
+        memcpy(&dst[idx], &src[dimdim_minus_dim - idx], row_size);
+    }
+
+    // Transpose diagonal / using temp
+    int back = dim * dim - 1;
+    pixel temp;
+    for (i = 0; i < dim; i++){
+        int a = dim * i;
+        int b = (dim_m_one - 0) * dim + dim_m_one - i;
+        for (j = 0; j < dim - i - 1; j += 2){
+            temp = dst[a];
+            dst[a] = dst[b];
+            dst[b] = temp;
+
+            temp = dst[a+1];
+            dst[a+1] = dst[b-dim];
+            dst[b-dim] = temp;
+
             a += 1;
             b -= dim;
         }
