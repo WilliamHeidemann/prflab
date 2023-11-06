@@ -821,6 +821,8 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
             int s = RIDX(i, j, dim);
             int d = RIDX(dim-1-j, i, dim);
             info_arr[s] = *(info*)malloc(sizeof(info));
+            info_arr->src = s;
+            info_arr->dst = d;
         }
     }
 
