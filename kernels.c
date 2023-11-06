@@ -524,8 +524,6 @@ void xor5(int dim, pixel *src, pixel *dst){
     for (i = 0; i < dim; i++){
         int a = dim * i;
         for (j = 0; j < dim - i - 1; j++){
-            //int a = dim * i + j;
-            //int b = RIDX(dim_m_one - j, dim_m_one - i, dim);
             int b = (dim_m_one - j) * dim + dim_m_one - i;
             pixel temp = dst[a];
             dst[a] = dst[b];
