@@ -522,9 +522,8 @@ void xor5(int dim, pixel *src, pixel *dst){
     // Transpose diagonal / using temp
     int back = dim * dim - 1;
     for (i = 0; i < dim; i++){
-        int a = dim * i;
         for (j = 0; j < dim - i - 1; j++){
-            a += j;
+            int a = dim * i + j;
             //int b = RIDX(dim_m_one - j, dim_m_one - i, dim);
             int b = (dim_m_one - j) * dim + dim_m_one - i;
             pixel temp = dst[a];
