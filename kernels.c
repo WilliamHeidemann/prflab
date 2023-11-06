@@ -564,13 +564,13 @@ void xor6(int dim, pixel *src, pixel *dst){
             dst[a+1] = dst[b-dim];
             dst[b-dim] = temp;
 
-            if (diagonal_index > a + 2) {
+            if (diagonal_index >= a + 2) {
                 temp = dst[a+2];
                 dst[a+2] = dst[b-dim-dim];
                 dst[b-dim-dim] = temp;
             }
 
-            if (diagonal_index > a + 3) {
+            if (diagonal_index >= a + 3) {
                 temp = dst[a+3];
                 dst[a+3] = dst[b-dim-dim-dim];
                 dst[b-dim-dim-dim] = temp;
