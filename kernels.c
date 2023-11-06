@@ -594,8 +594,8 @@ void xor6(int dim, pixel *src, pixel *dst){
 char a_desc[] = "j in outer loop";
 void a(int dim, pixel *src, pixel *dst) {
     int i, j;
-    int d1, d2, d3, d4, d5, d6, d7;
-    int dp1, dp2, dp3, dp4, dp5, dp6, dp7;
+    int d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15;
+    int dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, dp10, dp11, dp12, dp13, dp14, dp15;
     int d_precalc, s_precalc;
     d1 = dim;
     d2 = d1 + dim;
@@ -604,6 +604,14 @@ void a(int dim, pixel *src, pixel *dst) {
     d5 = d4 + dim;
     d6 = d5 + dim;
     d7 = d6 + dim;
+    d8 = d7 + dim;
+    d9 = d8 + dim;
+    d10 = d9 + dim;
+    d11 = d10 + dim;
+    d12 = d11 + dim;
+    d13 = d12 + dim;
+    d14 = d13 + dim;
+    d15 = d14 + dim;
 
     int dim_minus_one = dim - 1;
 
@@ -616,8 +624,16 @@ void a(int dim, pixel *src, pixel *dst) {
         dp5 = dp4 + 1;
         dp6 = dp5 + 1;
         dp7 = dp6 + 1;
+        dp8 = dp7 + 1;
+        dp9 = dp8 + 1;
+        dp10 = dp9 + 1;
+        dp11 = dp10 + 1;
+        dp12 = dp11 + 1;
+        dp13 = dp12 + 1;
+        dp14 = dp13 + 1;
+        dp15 = dp14 + 1;
 
-        for (i = 0; i < dim; i += 8){
+        for (i = 0; i < dim; i += 16){
             s_precalc = i * dim + j;
             dst[d_precalc + i] = src[s_precalc];
             dst[dp1 + i] = src[s_precalc + d1];
@@ -627,6 +643,14 @@ void a(int dim, pixel *src, pixel *dst) {
             dst[dp5 + i] = src[s_precalc + d5];
             dst[dp6 + i] = src[s_precalc + d6];
             dst[dp7 + i] = src[s_precalc + d7];
+            dst[dp8 + i] = src[s_precalc + d8];
+            dst[dp9 + i] = src[s_precalc + d9];
+            dst[dp10 + i] = src[s_precalc + d10];
+            dst[dp11 + i] = src[s_precalc + d11];
+            dst[dp12 + i] = src[s_precalc + d12];
+            dst[dp13 + i] = src[s_precalc + d13];
+            dst[dp14 + i] = src[s_precalc + d14];
+            dst[dp15 + i] = src[s_precalc + d15];
         }
     }
 }
