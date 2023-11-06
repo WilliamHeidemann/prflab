@@ -803,6 +803,7 @@ typedef struct {
 void* set_pixel(void *arg){
     info *data = (info*)arg;
     global_dst[data->dst] = global_src[data->src];
+    free(data);
     return NULL;
 }
 
