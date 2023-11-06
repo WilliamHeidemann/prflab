@@ -641,8 +641,8 @@ char c_desc[] = "src in rows, dst in columns";
 void c(int dim, pixel *src, pixel *dst) {
     int dimdim = dim * dim;
     int a_jump = dimdim + 1;
-    int a = dim * (dim - 1);
-    int b = 0;
+    int b = dim * (dim - 1);
+    int a = 0;
     while (b < dimdim) {
         for (int i = 0; i < dim; i += 8) {
             dst[a] = src[b];
@@ -653,10 +653,10 @@ void c(int dim, pixel *src, pixel *dst) {
             dst[a+5] = src[b-dim-dim-dim-dim-dim];
             dst[a+6] = src[b-dim-dim-dim-dim-dim-dim];
             dst[a+7] = src[b-dim-dim-dim-dim-dim-dim-dim];
-            a -= 8 * dim;
-            b += 8;
+            b -= 8 * dim;
+            a += 8;
         }
-        a += a_jump;
+        b += a_jump;
     }
 }
 
