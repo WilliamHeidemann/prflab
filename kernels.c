@@ -529,7 +529,7 @@ void xor5(int dim, pixel *src, pixel *dst){
             dst[a] = dst[b];
             dst[b] = temp;
             a += 1;
-            b += (dim_m_one - 1) * dim;
+            b += dim_m_one * dim;
         }
     }
 }
