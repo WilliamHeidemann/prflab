@@ -595,6 +595,7 @@ char a_desc[] = "j in outer loop";
 void a(int dim, pixel *src, pixel *dst) {
     int i, j;
     int d1, d2, d3, d4, d5, d6, d7;
+    int dp1, dp2, dp3, dp4, dp5, dp6, dp7;
     d1 = dim;
     d2 = dim * 2;
     d3 = dim * 3;
@@ -605,17 +606,24 @@ void a(int dim, pixel *src, pixel *dst) {
 
     for (j = 0; j < dim; j++){
         int d_precalc = (dim - 1 - j) * dim;
+        dp1 = d_precalc + 1;
+        dp2 = d_precalc + 2;
+        dp3 = d_precalc + 3;
+        dp4 = d_precalc + 4;
+        dp5 = d_precalc + 5;
+        dp6 = d_precalc + 6;
+        dp7 = d_precalc + 7;
+
         for (i = 0; i < dim; i += 8){
             int s_precalc = i * dim + j;
-            dst[d_precalc + i + 0] = src[s_precalc];
-            dst[d_precalc + i + 1] = src[s_precalc + dim];
-            dst[d_precalc + i + 2] = src[s_precalc + d2];
-            dst[d_precalc + i + 3] = src[s_precalc + d3];
-            dst[d_precalc + i + 4] = src[s_precalc + d4];
-            dst[d_precalc + i + 5] = src[s_precalc + d5];
-            dst[d_precalc + i + 6] = src[s_precalc + d6];
-            dst[d_precalc + i + 7] = src[s_precalc + d7];
-
+            dst[d_precalc + i] = src[s_precalc];
+            dst[dp1 + i] = src[s_precalc + dim];
+            dst[dp2 + i] = src[s_precalc + d2];
+            dst[dp3 + i] = src[s_precalc + d3];
+            dst[dp4 + i] = src[s_precalc + d4];
+            dst[dp5 + i] = src[s_precalc + d5];
+            dst[dp6 + i] = src[s_precalc + d6];
+            dst[dp7 + i] = src[s_precalc + d7];
         }
     }
 }
