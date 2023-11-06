@@ -608,17 +608,17 @@ void a(int dim, pixel *src, pixel *dst) {
     for (j = 0; j < dim; j++){
         d_precalc = (dim - 1 - j) * dim;
         dp1 = d_precalc + 1;
-        dp2 = d_precalc + 2;
-        dp3 = d_precalc + 3;
-        dp4 = d_precalc + 4;
-        dp5 = d_precalc + 5;
-        dp6 = d_precalc + 6;
-        dp7 = d_precalc + 7;
+        dp2 = dp1 + 1;
+        dp3 = dp2 + 1;
+        dp4 = dp3 + 1;
+        dp5 = dp4 + 1;
+        dp6 = dp5 + 1;
+        dp7 = dp6 + 1;
 
         for (i = 0; i < dim; i += 8){
             s_precalc = i * dim + j;
             dst[d_precalc + i] = src[s_precalc];
-            dst[dp1 + i] = src[s_precalc + dim];
+            dst[dp1 + i] = src[s_precalc + d1];
             dst[dp2 + i] = src[s_precalc + d2];
             dst[dp3 + i] = src[s_precalc + d3];
             dst[dp4 + i] = src[s_precalc + d4];
