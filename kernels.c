@@ -576,6 +576,7 @@ void xor6(int dim, pixel *src, pixel *dst){
             a += 2;
             b -= dim * 2;
         }
+        a += j % 2;
     }
 }
 
