@@ -551,7 +551,6 @@ void xor6(int dim, pixel *src, pixel *dst){
     // Transpose diagonal / using temp
     pixel temp;
     int a = 0;
-    int b = dim_m_one * dim + dim_m_one;
     for (i = 0; i < dim; i++){
         int b = dim_m_one * dim + dim_m_one - i;
         int diagonal_index = dim - i - 1;
@@ -572,23 +571,7 @@ void xor6(int dim, pixel *src, pixel *dst){
             temp = dst[a+3];
             dst[a+3] = dst[b-dim-dim-dim];
             dst[b-dim-dim-dim] = temp;
-/*
-            temp = dst[a+4];
-            dst[a+4] = dst[b-dim-dim-dim-dim];
-            dst[b-dim-dim-dim-dim] = temp;
 
-            temp = dst[a+5];
-            dst[a+5] = dst[b-dim-dim-dim-dim-dim];
-            dst[b-dim-dim-dim-dim-dim] = temp;
-
-            temp = dst[a+6];
-            dst[a+6] = dst[b-dim-dim-dim-dim-dim-dim];
-            dst[b-dim-dim-dim-dim-dim-dim] = temp;
-
-            temp = dst[a+7];
-            dst[a+7] = dst[b-dim-dim-dim-dim-dim-dim-dim];
-            dst[b-dim-dim-dim-dim-dim-dim-dim] = temp;
-*/
             a += 4;
             b -= dim * 4;
         }
@@ -605,6 +588,20 @@ void xor6(int dim, pixel *src, pixel *dst){
 
         a += dim-diagonal_index;
     }
+}
+
+
+char a_desc[] = "Restart";
+void a(int dim, pixel *src, pixel *dst) {
+    int i, j;
+
+    for (j = 0; j < dim; j++)
+        for (i = 0; i < dim; i += 4){
+            dst[(dim - 1 - j) * dim + i] = src[i * dim + j];
+            dst[(dim - 1 - j) * dim + i + 1] = src[(i + 1) * dim + j];
+            dst[(dim - 1 - j) * dim + i + 2] = src[(i + 2) * dim + j];
+            dst[(dim - 1 - j) * dim + i + 3] = src[(i + 3) * dim + j];
+        }
 }
 
 void print_corners(pixel *src, int dim) {
@@ -645,6 +642,7 @@ void register_rotate_functions()
     add_rotate_function(&xor4, xor4desc);
     add_rotate_function(&xor5, xor5desc);
     add_rotate_function(&xor6, xor6desc);
+    add_rotate_function(&a, a_desc);
     /*
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
