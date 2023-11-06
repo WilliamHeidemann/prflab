@@ -655,7 +655,7 @@ void c(int dim, pixel *src, pixel *dst) {
             b += 8 * dim;
             a += 8;
         }
-        b -= dimdim - 1;
+        b -= dimdim + 1;
     }
 }
 
