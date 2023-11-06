@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "defs.h"
 #include "smooth.h" // helper functions for naive_smooth
 #include "blend.h"  // helper functions for naive_blend
@@ -791,6 +792,40 @@ void register_rotate_functions()
 // Your different versions of the rotate_t kernel go here
 // (i.e. rotate with multi-threading)
 
+pixel *global_src;
+pixel *global_dst;
+
+typedef struct {
+    int src;
+    int dst;
+} info;
+
+void* set_pixel(void *arg){
+    info *data = (info*)arg;
+    global_dst[data->dst] = global_src[data->src];
+}
+
+char rotate_t_a_descr[] = "First attempt";
+
+void rotate_t_a(int dim, pixel *src, pixel *dst){
+    global_src = src;
+    global_dst = dst;
+
+    int i, j;
+    for (i = 0; i < dim; i++)
+        for (j = 0; j < dim; j++) {
+            int s = RIDX(i, j, dim);
+            int d = RIDX(dim-1-j, i, dim);
+            info data = {s, d};
+            pthread_t thread_id;
+            pthread_create(&thread_id, NULL, set_pixel, (void*)&data);
+
+            //dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+        }
+}
+
+
+
 /* 
  * rotate_t - Your current working version of rotate_t
  * IMPORTANT: This is the version you will be graded on
@@ -812,6 +847,7 @@ void rotate_t(int dim, pixel *src, pixel *dst)
 void register_rotate_t_functions() 
 {
     add_rotate_t_function(&rotate_t, rotate_t_descr);
+    add_rotate_t_function(&rotate_t_a, rotate_t_a_descr);
     /* ... Register additional test functions here */
 }
 
