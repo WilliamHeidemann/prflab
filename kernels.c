@@ -640,22 +640,22 @@ void b(int dim, pixel *src, pixel *dst) {
 char c_desc[] = "src in rows, dst in columns";
 void c(int dim, pixel *src, pixel *dst) {
     int dimdim = dim * dim;
-    int b = dim * (dim - 1);
+    int b = dim - 1;
     int a = 0;
     while (a < dimdim) {
         for (int i = 0; i < dim; i += 8) {
             dst[a] = src[b];
-            dst[a+1] = src[b-dim];
-            dst[a+2] = src[b-dim-dim];
-            dst[a+3] = src[b-dim-dim-dim];
-            dst[a+4] = src[b-dim-dim-dim-dim];
-            dst[a+5] = src[b-dim-dim-dim-dim-dim];
-            dst[a+6] = src[b-dim-dim-dim-dim-dim-dim];
-            dst[a+7] = src[b-dim-dim-dim-dim-dim-dim-dim];
-            b -= 8 * dim;
+            dst[a+1] = src[b+dim];
+            dst[a+2] = src[b+dim+dim];
+            dst[a+3] = src[b+dim+dim+dim];
+            dst[a+4] = src[b+dim+dim+dim+dim];
+            dst[a+5] = src[b+dim+dim+dim+dim+dim];
+            dst[a+6] = src[b+dim+dim+dim+dim+dim+dim];
+            dst[a+7] = src[b+dim+dim+dim+dim+dim+dim+dim];
+            b += 8 * dim;
             a += 8;
         }
-        b += dimdim + 1;
+        b -= dimdim - 1;
     }
 }
 
