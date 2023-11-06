@@ -599,15 +599,15 @@ void a(int dim, pixel *src, pixel *dst) {
         int d_precalc = (dim - 1 - j) * dim;
         for (i = 0; i < dim; i += 8){
             int s_precalc = i * dim + j;
-
-            dst[d_precalc + i + 0] = src[s_precalc];
-            dst[d_precalc + i + 1] = src[s_precalc + dim];
-            dst[d_precalc + i + 2] = src[s_precalc + dim + dim];
-            dst[d_precalc + i + 3] = src[s_precalc + dim + dim + dim];
-            dst[d_precalc + i + 4] = src[s_precalc + dim + dim + dim + dim];
-            dst[d_precalc + i + 5] = src[s_precalc + dim + dim + dim + dim + dim];
-            dst[d_precalc + i + 6] = src[s_precalc + dim + dim + dim + dim + dim + dim];
-            dst[d_precalc + i + 7] = src[s_precalc + dim + dim + dim + dim + dim + dim + dim];
+            d_precalc += i;
+            dst[d_precalc + 0] = src[s_precalc];
+            dst[d_precalc + 1] = src[s_precalc + dim];
+            dst[d_precalc + 2] = src[s_precalc + dim + dim];
+            dst[d_precalc + 3] = src[s_precalc + dim + dim + dim];
+            dst[d_precalc + 4] = src[s_precalc + dim + dim + dim + dim];
+            dst[d_precalc + 5] = src[s_precalc + dim + dim + dim + dim + dim];
+            dst[d_precalc + 6] = src[s_precalc + dim + dim + dim + dim + dim + dim];
+            dst[d_precalc + 7] = src[s_precalc + dim + dim + dim + dim + dim + dim + dim];
         }
     }
 }
