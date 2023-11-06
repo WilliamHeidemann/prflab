@@ -591,7 +591,7 @@ void xor6(int dim, pixel *src, pixel *dst){
 }
 
 
-char a_desc[] = "Restart";
+char a_desc[] = "j in outer loop";
 void a(int dim, pixel *src, pixel *dst) {
     int i, j;
 
@@ -610,6 +610,27 @@ void a(int dim, pixel *src, pixel *dst) {
             dst[d_precalc + i + 6] = src[s_precalc + dim + dim + dim + dim + dim + dim];
             dst[d_precalc + i + 7] = src[s_precalc + dim + dim + dim + dim + dim + dim + dim];
 
+        }
+    }
+}
+
+char b_desc[] = "i in outer loop";
+void b(int dim, pixel *src, pixel *dst) {
+    int i, j;
+
+    for (i = 0; i < dim; i++){
+        for (j = 0; j < dim; j += 8){
+            int d_precalc = (dim - 1 - j) * dim;
+            int s_precalc = i * dim + j;
+
+            dst[d_precalc + i + 0] = src[s_precalc];
+            dst[d_precalc + i + 1] = src[s_precalc + dim];
+            dst[d_precalc + i + 2] = src[s_precalc + dim + dim];
+            dst[d_precalc + i + 3] = src[s_precalc + dim + dim + dim];
+            dst[d_precalc + i + 4] = src[s_precalc + dim + dim + dim + dim];
+            dst[d_precalc + i + 5] = src[s_precalc + dim + dim + dim + dim + dim];
+            dst[d_precalc + i + 6] = src[s_precalc + dim + dim + dim + dim + dim + dim];
+            dst[d_precalc + i + 7] = src[s_precalc + dim + dim + dim + dim + dim + dim + dim];
         }
     }
 }
@@ -646,13 +667,16 @@ void rotate(int dim, pixel *src, pixel *dst)
  */
 void register_rotate_functions() 
 {
+    /*
     add_rotate_function(&xor_first, xor_first_descr);
     add_rotate_function(&xor2, xor2desc);
     add_rotate_function(&xor3, xor3desc);
     add_rotate_function(&xor4, xor4desc);
     add_rotate_function(&xor5, xor5desc);
     add_rotate_function(&xor6, xor6desc);
+    */
     add_rotate_function(&a, a_desc);
+    add_rotate_function(&b, b_desc);
     /*
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
