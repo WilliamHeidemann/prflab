@@ -563,6 +563,9 @@ void xor6(int dim, pixel *src, pixel *dst){
             dst[a+1] = dst[b-dim];
             dst[b-dim] = temp;
 
+            if (&dst[a] == &dst[b]){
+                printf("Same");
+            }
 /*
             temp = dst[a+2];
             dst[a+2] = dst[b-dim-dim];
@@ -576,7 +579,7 @@ void xor6(int dim, pixel *src, pixel *dst){
             a += 2;
             b -= dim * 2;
         }
-        a += (dim - i - 1) % 2;
+        //a += (dim - i - 1) % 2;
     }
 }
 
