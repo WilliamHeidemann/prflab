@@ -614,7 +614,7 @@ void a(int dim, pixel *src, pixel *dst) {
     }
 }
 
-char b_desc[] = "i in outer loop";
+char b_desc[] = "dst in rows, src in columns";
 void b(int dim, pixel *src, pixel *dst) {
     int dimdim = dim * dim;
     int a_jump = dimdim + 1;
@@ -630,6 +630,29 @@ void b(int dim, pixel *src, pixel *dst) {
             dst[a-dim-dim-dim-dim-dim] = src[b+5];
             dst[a-dim-dim-dim-dim-dim-dim] = src[b+6];
             dst[a-dim-dim-dim-dim-dim-dim-dim] = src[b+7];
+            a -= 8 * dim;
+            b += 8;
+        }
+        a += a_jump;
+    }
+}
+
+char c_desc[] = "src in rows, dst in columns";
+void c(int dim, pixel *src, pixel *dst) {
+    int dimdim = dim * dim;
+    int a_jump = dimdim + 1;
+    int a = dim * (dim - 1);
+    int b = 0;
+    while (b < dimdim) {
+        for (int i = 0; i < dim; i += 8) {
+            dst[a] = src[b];
+            dst[a+1] = src[b-dim];
+            dst[a+2] = src[b-dim-dim];
+            dst[a+3] = src[b-dim-dim-dim];
+            dst[a+4] = src[b-dim-dim-dim-dim];
+            dst[a+5] = src[b-dim-dim-dim-dim-dim];
+            dst[a+6] = src[b-dim-dim-dim-dim-dim-dim];
+            dst[a+7] = src[b-dim-dim-dim-dim-dim-dim-dim];
             a -= 8 * dim;
             b += 8;
         }
@@ -679,6 +702,7 @@ void register_rotate_functions()
     */
     add_rotate_function(&a, a_desc);
     add_rotate_function(&b, b_desc);
+    add_rotate_function(&c, c_desc);
     /*
     add_rotate_function(&rotate, rotate_descr);
     add_rotate_function(&more_writes_pr_inner_loop, more_writes_pr_inner_loopdescr);
