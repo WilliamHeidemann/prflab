@@ -620,18 +620,33 @@ void b(int dim, pixel *src, pixel *dst) {
     int a_jump = dimdim + 1;
     int a = dim * (dim - 1);
     int b = 0;
+    int a1, a2, a3, a4, a5, a6, a7;
     while (b < dimdim) {
+        a1 = a - dim;
+        a2 = a1 - dim;
+        a3 = a2 - dim;
+        a4 = a3 - dim;
+        a5 = a4 - dim;
+        a6 = a5 - dim;
+        a7 = a6 - dim;
         for (int i = 0; i < dim; i += 8) {
             dst[a] = src[b];
-            dst[a-dim] = src[b+1];
-            dst[a-dim-dim] = src[b+2];
-            dst[a-dim-dim-dim] = src[b+3];
-            dst[a-dim-dim-dim-dim] = src[b+4];
-            dst[a-dim-dim-dim-dim-dim] = src[b+5];
-            dst[a-dim-dim-dim-dim-dim-dim] = src[b+6];
-            dst[a-dim-dim-dim-dim-dim-dim-dim] = src[b+7];
+            dst[a1] = src[b+1];
+            dst[a2] = src[b+2];
+            dst[a3] = src[b+3];
+            dst[a4] = src[b+4];
+            dst[a5] = src[b+5];
+            dst[a6] = src[b+6];
+            dst[a7] = src[b+7];
             a -= 8 * dim;
             b += 8;
+            a1 = a - dim;
+            a2 = a1 - dim;
+            a3 = a2 - dim;
+            a4 = a3 - dim;
+            a5 = a4 - dim;
+            a6 = a5 - dim;
+            a7 = a6 - dim;
         }
         a += a_jump;
     }
