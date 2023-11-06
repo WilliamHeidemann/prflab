@@ -794,16 +794,22 @@ void register_rotate_functions()
 
 pixel *global_src;
 pixel *global_dst;
-
-typedef struct {
-    int src;
-    int dst;
-} info;
+int global_dim;
 
 void* set_pixel(void *arg){
-    info *data = (info*)arg;
-    global_dst[data->dst] = global_src[data->src];
-    free(data);
+    int idx = *(int*)arg;
+    int s, d;
+    int block_start = 16 * idx;
+    int next_block_start = 16 * (idx + 1);
+
+    for (int j = 0; j < global_dim; ++j) {
+        for (int i = block_start; i < next_block_start; ++i) {
+            s = RIDX(i, j, global_dim);
+            d = RIDX(global_dim-1-j, i, global_dim);
+            global_dst[d] = global_src[s];
+        }
+    }
+
     return NULL;
 }
 
@@ -812,31 +818,16 @@ char rotate_t_a_descr[] = "First attempt";
 void rotate_t_a(int dim, pixel *src, pixel *dst){
     global_src = src;
     global_dst = dst;
+    global_dim = dim;
 
     int i, j;
     pthread_t threads[dim*dim];
-    info *info_arr = NULL;
-    for (i = 0; i < dim; i++){
-        for (j = 0; j < dim; j++) {
-            int s = RIDX(i, j, dim);
-            int d = RIDX(dim-1-j, i, dim);
-            info_arr[s] = *(info*)malloc(sizeof(info));
-            info_arr->src = s;
-            info_arr->dst = d;
-        }
+    for (i = 0; i < dim / 16; i++){
+        pthread_create(&threads[i], NULL, set_pixel, (void*)&i);
     }
 
-    for (i = 0; i < dim; ++i) {
-        for (j = 0; j < dim; ++j) {
-            int s = RIDX(i, j, dim);
-            pthread_create(&threads[s], NULL, set_pixel, (void*)&info_arr[s]);
-        }
-    }
-
-    for (i = 0; i < dim; ++i) {
-        for (j = 0; j < dim; ++j) {
-            pthread_join(threads[RIDX(i, j, dim)], NULL);
-        }
+    for (i = 0; i < dim * dim; ++i) {
+        pthread_join(threads[i], NULL);
     }
 }
 
