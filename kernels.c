@@ -583,11 +583,11 @@ void xor6(int dim, pixel *src, pixel *dst){
 
             temp = dst[a+6];
             dst[a+6] = dst[b-dim-dim-dim-dim-dim-dim];
-            dst[b-dim-dim-dim-dim-dim] = temp;
+            dst[b-dim-dim-dim-dim-dim-dim] = temp;
 
             temp = dst[a+7];
             dst[a+7] = dst[b-dim-dim-dim-dim-dim-dim-dim];
-            dst[b-dim-dim-dim-dim-dim-dim] = temp;
+            dst[b-dim-dim-dim-dim-dim-dim-dim] = temp;
 
             a += 8;
             b -= dim * 8;
