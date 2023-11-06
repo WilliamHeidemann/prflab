@@ -749,7 +749,7 @@ void print_corners(pixel *src, int dim) {
 char rotate_descr[] = "rotate: Current working version";
 void rotate(int dim, pixel *src, pixel *dst)
 {
-    d(dim, src, dst);
+    a(dim, src, dst);
 }
 
 /*
