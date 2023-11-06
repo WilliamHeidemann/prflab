@@ -549,12 +549,11 @@ void xor6(int dim, pixel *src, pixel *dst){
     }
 
     // Transpose diagonal / using temp
-    int back = dim * dim - 1;
     pixel temp;
     int a = 0;
     int b = dim_m_one * dim + dim_m_one;
     for (i = 0; i < dim; i++){
-        //int b = dim_m_one * dim + dim_m_one - i;
+        int b = dim_m_one * dim + dim_m_one - i;
         int diagonal_index = dim - i - 1;
         for (j = 0; j < diagonal_index - 4; j += 4){
 
@@ -605,8 +604,6 @@ void xor6(int dim, pixel *src, pixel *dst){
         }
 
         a += dim-diagonal_index;
-        b -= 1;
-        b += diagonal_index - 1;
     }
 }
 
