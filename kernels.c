@@ -523,12 +523,13 @@ void xor5(int dim, pixel *src, pixel *dst){
     int back = dim * dim - 1;
     for (i = 0; i < dim; i++){
         int a = dim * i;
+        int b = dim_m_one - i;
         for (j = 0; j < dim - i - 1; j++){
-            int b = (dim_m_one - j) * dim + dim_m_one - i;
             pixel temp = dst[a];
             dst[a] = dst[b];
             dst[b] = temp;
             a += 1;
+            b += (dim_m_one - 1) * dim;
         }
     }
 }
