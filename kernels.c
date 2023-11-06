@@ -823,12 +823,12 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
     int i;
     pthread_t threads[dim * dim];
     int thread_args[dim * dim];
-    for (i = 0; i < dim / 16; i++){
+    for (i = 0; i < dim * dim / 16; i++){
         thread_args[i] = i;
         pthread_create(&threads[i], NULL, set_pixel, (void*)&thread_args[i]);
     }
 
-    for (i = 0; i < dim * dim; ++i) {
+    for (i = 0; i < dim * dim / 16; ++i) {
         pthread_join(threads[i], NULL);
     }
 }
