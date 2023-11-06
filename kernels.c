@@ -825,7 +825,6 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
             pthread_create(&threads[s], NULL, set_pixel, (void*)&data);
         }
 
-    return;
     for (i = 0; i < dim; ++i) {
         for (j = 0; j < dim; ++j) {
             pthread_join(threads[RIDX(i, j, dim)], NULL);
