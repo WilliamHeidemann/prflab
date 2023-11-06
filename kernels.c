@@ -616,17 +616,20 @@ void a(int dim, pixel *src, pixel *dst) {
 
 char b_desc[] = "i in outer loop";
 void b(int dim, pixel *src, pixel *dst) {
-    int i, j;
+
+    print_corners(src, dim);
 
     int dimdim = dim * dim;
     int a_jump = dim * (dim-1) + 1;
     int a = dim * (dim - 1);
     int b = 0;
-    while (b < dimdim - 1) {
+    while (b < dimdim) {
         dst[a] = src[b];
         a += a_jump;
         b++;
     }
+
+    print_corners(src, dim);
 }
 
 void print_corners(pixel *src, int dim) {
