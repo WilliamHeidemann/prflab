@@ -815,15 +815,21 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
 
     int i, j;
     pthread_t threads[dim*dim];
-    for (i = 0; i < dim; i++)
+    info *info_arr = NULL;
+    for (i = 0; i < dim; i++){
         for (j = 0; j < dim; j++) {
             int s = RIDX(i, j, dim);
             int d = RIDX(dim-1-j, i, dim);
-            info data = {s, d};
-            data.src = s;
-            data.dst = d;
-            pthread_create(&threads[s], NULL, set_pixel, (void*)&data);
+            info_arr[s] = *(info*)malloc(sizeof(info));
         }
+    }
+
+    for (i = 0; i < dim; ++i) {
+        for (j = 0; j < dim; ++j) {
+            int s = RIDX(i, j, dim);
+            pthread_create(&threads[s], NULL, set_pixel, (void*)&info_arr[s]);
+        }
+    }
 
     for (i = 0; i < dim; ++i) {
         for (j = 0; j < dim; ++j) {
