@@ -629,7 +629,7 @@ void b(int dim, pixel *src, pixel *dst) {
         b++;
     }
 
-    print_corners(src, dim);
+    print_corners(dst, dim);
 }
 
 void print_corners(pixel *src, int dim) {
