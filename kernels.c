@@ -821,7 +821,7 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
     global_dim = dim;
 
     int i;
-    pthread_t threads[dim * dim];
+    pthread_t threads[dim * dim / 16];
     int thread_args[dim * dim];
     for (i = 0; i < dim * dim / 16; i++){
         thread_args[i] = i;
