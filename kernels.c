@@ -605,8 +605,10 @@ void a(int dim, pixel *src, pixel *dst) {
     d6 = d5 + dim;
     d7 = d6 + dim;
 
+    int dim_minus_one = dim - 1;
+
     for (j = 0; j < dim; j++){
-        d_precalc = (dim - 1 - j) * dim;
+        d_precalc = (dim_minus_one - j) * dim;
         dp1 = d_precalc + 1;
         dp2 = dp1 + 1;
         dp3 = dp2 + 1;
