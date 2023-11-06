@@ -819,9 +819,9 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
         for (j = 0; j < dim; j++) {
             int s = RIDX(i, j, dim);
             int d = RIDX(dim-1-j, i, dim);
-            info* data = (info*)malloc(sizeof(info));
-            data->src = s;
-            data->dst = d;
+            info data = {s, d};
+            data.src = s;
+            data.dst = d;
             pthread_create(&threads[s], NULL, set_pixel, (void*)&data);
         }
 
