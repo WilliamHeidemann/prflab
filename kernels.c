@@ -555,13 +555,35 @@ void xor6(int dim, pixel *src, pixel *dst){
         int a = dim * i;
         int b = dim_m_one * dim + dim_m_one - i;
         int diagonal_index = dim - i - 1;
-        for (j = 0; j < diagonal_index; j += 1){
+        for (j = 0; j < diagonal_index + 4; j += 4){
 
             temp = dst[a];
             dst[a] = dst[b];
             dst[b] = temp;
 
-            a += 1;
+            temp = dst[a+1];
+            dst[a+1] = dst[b-dim];
+            dst[b-dim] = temp;
+
+            temp = dst[a+2];
+            dst[a+2] = dst[b-dim-dim];
+            dst[b-dim-dim] = temp;
+
+            temp = dst[a+3];
+            dst[a+3] = dst[b-dim-dim-dim];
+            dst[b-dim-dim-dim] = temp;
+
+            a += 4;
+            b -= dim * 4;
+        }
+
+        while (j < diagonal_index) {
+            temp = dst[a];
+            dst[a] = dst[b];
+            dst[b] = temp;
+
+            j++;
+            a++;
             b -= dim;
         }
     }
