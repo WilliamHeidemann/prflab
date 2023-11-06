@@ -616,9 +616,6 @@ void a(int dim, pixel *src, pixel *dst) {
 
 char b_desc[] = "i in outer loop";
 void b(int dim, pixel *src, pixel *dst) {
-
-    print_corners(src, dim);
-
     int dimdim = dim * dim;
     int a_jump = dimdim + 1;
     int a = dim * (dim - 1);
@@ -631,8 +628,6 @@ void b(int dim, pixel *src, pixel *dst) {
         }
         a += a_jump;
     }
-
-    print_corners(dst, dim);
 }
 
 void print_corners(pixel *src, int dim) {
