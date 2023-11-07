@@ -934,12 +934,12 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
     //global_dim = dim;
     global_src = src;
     global_dst = dst;
+    int dimdim = dim * dim;
 
-    pthread_t threads[dim];
-    int thread_args[dim];
+    pthread_t threads[dimdim];
+    int thread_args[dimdim];
     int i;
 
-    int dimdim = dim * dim;
 
     for (i = 0; i < dimdim; i++) {
         thread_args[i] = i;
