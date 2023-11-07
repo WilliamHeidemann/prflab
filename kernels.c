@@ -883,14 +883,12 @@ void naive_blend(int dim, pixel *src, pixel *dst) // reads global variable `pixe
 	    blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
 }
 
-char blend_one_descr[] = "Copy logic of rotate";
-void blend_one(register int dim, register pixel *src, register pixel *dst) {
-    register int i, j;
-
-    for (i = 0; i < dim; i++){
-        for (j = 0; j < dim; j++){
-            blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
-        }
+char blend_one_descr[] = "Only a single loop";
+void blend_one(int dim, register pixel *src, register pixel *dst) {
+    register int i;
+    register int dimdim = dim * dim;
+    for (i = 0; i < dimdim; i++){
+        blend_pixel(&src[i], &dst[i], &bgc); // `blend_pixel` defined in blend.c
     }
 }
 
