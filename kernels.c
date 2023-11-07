@@ -884,50 +884,12 @@ void naive_blend(int dim, pixel *src, pixel *dst) // reads global variable `pixe
 }
 
 char blend_one_descr[] = "Copy logic of rotate";
-void blend_one(int dim, pixel *src, pixel *dst) {
-    int i, j;
-    int d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15;
-    int d_precalc, s_precalc;
-    d1 = dim;
-    d2 = d1 + dim;
-    d3 = d2 + dim;
-    d4 = d3 + dim;
-    d5 = d4 + dim;
-    d6 = d5 + dim;
-    d7 = d6 + dim;
-    d8 = d7 + dim;
-    d9 = d8 + dim;
-    d10 = d9 + dim;
-    d11 = d10 + dim;
-    d12 = d11 + dim;
-    d13 = d12 + dim;
-    d14 = d13 + dim;
-    d15 = d14 + dim;
-
-    int dim_minus_one = dim - 1;
+void blend_one(register int dim, register pixel *src, register pixel *dst) {
+    register int i, j;
 
     for (j = 0; j < dim; j++){
-        int d_pre = (dim_minus_one - j) * dim;
-
-        for (i = 0; i < dim; i += 16){
-            s_precalc = i * dim + j;
-            d_precalc = d_pre + i;
-            blend_pixel(&src[s_precalc], &dst[d_precalc], &bgc);
-            blend_pixel(&src[s_precalc + d1], &dst[d_precalc + 1], &bgc);
-            blend_pixel(&src[s_precalc + d2], &dst[d_precalc + 2], &bgc);
-            blend_pixel(&src[s_precalc + d3], &dst[d_precalc + 3], &bgc);
-            blend_pixel(&src[s_precalc + d4], &dst[d_precalc + 4], &bgc);
-            blend_pixel(&src[s_precalc + d5], &dst[d_precalc + 5], &bgc);
-            blend_pixel(&src[s_precalc + d6], &dst[d_precalc + 6], &bgc);
-            blend_pixel(&src[s_precalc + d7], &dst[d_precalc + 7], &bgc);
-            blend_pixel(&src[s_precalc + d8], &dst[d_precalc + 8], &bgc);
-            blend_pixel(&src[s_precalc + d9], &dst[d_precalc + 9], &bgc);
-            blend_pixel(&src[s_precalc + d10], &dst[d_precalc + 10], &bgc);
-            blend_pixel(&src[s_precalc + d11], &dst[d_precalc + 11], &bgc);
-            blend_pixel(&src[s_precalc + d12], &dst[d_precalc + 12], &bgc);
-            blend_pixel(&src[s_precalc + d13], &dst[d_precalc + 13], &bgc);
-            blend_pixel(&src[s_precalc + d14], &dst[d_precalc + 14], &bgc);
-            blend_pixel(&src[s_precalc + d15], &dst[d_precalc + 15], &bgc);
+        for (i = 0; i < dim; i++){
+            blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
         }
     }
 }
