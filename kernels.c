@@ -941,8 +941,8 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
     global_dst = dst;
     int dimdim = dim * dim;
 
-    pthread_t threads[dimdim];
-    int thread_args[dimdim];
+    pthread_t threads[dim];
+    int thread_args[dim];
     int i;
 
     int arg = 0;
@@ -951,13 +951,6 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
         pthread_create(&threads[arg], NULL, blend_thread_function, (void *) &thread_args[arg]);
         arg += 1;
     }
-
-    /*
-    for (i = 0; i < dimdim; ++i) {
-        blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
-        //blend_pixel(&src[i], &dst[i], &bgc); // `blend_pixel` defined in blend.c
-    }
-     */
 
     arg = 0;
     for (i = 0; i < dimdim; i += dim) {
