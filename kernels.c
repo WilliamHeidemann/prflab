@@ -849,7 +849,7 @@ void rotate_t_a(int dim, pixel *src, pixel *dst){
 char rotate_t_descr[] = "rotate_t: Current working version";
 void rotate_t(int dim, pixel *src, pixel *dst)
 {
-    naive_rotate(dim, src, dst);
+    rotate_t_a(dim, src, dst);
 }
 
 /*********************************************************************
@@ -895,7 +895,7 @@ void blend_one(int dim, register pixel *src, register pixel *dst) {
 char blend_descr[] = "blend: Current working version";
 void blend(int dim, pixel *src, pixel *dst)
 {
-    naive_blend(dim, src, dst);
+    blend_one(dim, src, dst);
 }
 
 /*
@@ -922,6 +922,34 @@ void blend_v(int dim, pixel *src, pixel *dst)
     naive_blend(dim, src, dst);
 }
 
+void* blend_thread_function(void *arg) {
+    int idx = *(int*)arg;
+    blend_pixel(&global_src[idx], &global_dst[idx], &bgc); // `blend_pixel` defined in blend.c
+    return NULL;
+}
+
+
+char blend_v_one_descr[] = "First attempt";
+void blend_v_one(int dim, pixel *src, pixel *dst) {
+    //global_dim = dim;
+    global_src = src;
+    global_dst = dst;
+
+    pthread_t threads[dim];
+    int thread_args[dim];
+    int i;
+
+    for (i = 0; i < dim; i++) {
+        thread_args[i] = i;
+        pthread_create(&threads[i], NULL, blend_thread_function, (void *) &thread_args[i]);
+    }
+
+    for (i = 0; i < dim; ++i) {
+        pthread_join(threads[i], NULL);
+    }
+}
+
+
 /*
  * register_blend_v_functions - Register all of your different versions
  *     of the blend_v kernel with the driver by calling the
@@ -929,6 +957,7 @@ void blend_v(int dim, pixel *src, pixel *dst)
  */
 void register_blend_v_functions() {
     add_blend_v_function(&blend_v, blend_v_descr);
+    add_blend_v_function(&blend_v_one, blend_v_one_descr);
     /* ... Register additional test functions here */
 }
 
