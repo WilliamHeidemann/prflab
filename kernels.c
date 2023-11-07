@@ -816,6 +816,12 @@ void* thread_function(void *arg){
 char rotate_t_a_descr[] = "First attempt";
 
 void rotate_t_a(int dim, pixel *src, pixel *dst){
+
+    if (dim <= 512) {
+        rotate(dim, src, dst);
+        return;
+    }
+
     global_src = src;
     global_dst = dst;
     global_dim = dim;
@@ -875,6 +881,55 @@ void naive_blend(int dim, pixel *src, pixel *dst) // reads global variable `pixe
     for (i = 0; i < dim; i++)
 	for (j = 0; j < dim; j++)
 	    blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
+}
+
+char blend_one_descr[] = "Copy method of rotate";
+void blend_one(int dim, pixel *src, pixel *dst) {
+    int i, j;
+    int d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15;
+    int d_precalc, s_precalc;
+    d1 = dim;
+    d2 = d1 + dim;
+    d3 = d2 + dim;
+    d4 = d3 + dim;
+    d5 = d4 + dim;
+    d6 = d5 + dim;
+    d7 = d6 + dim;
+    d8 = d7 + dim;
+    d9 = d8 + dim;
+    d10 = d9 + dim;
+    d11 = d10 + dim;
+    d12 = d11 + dim;
+    d13 = d12 + dim;
+    d14 = d13 + dim;
+    d15 = d14 + dim;
+
+    int dim_minus_one = dim - 1;
+
+    for (j = 0; j < dim; j++){
+        int d_pre = (dim_minus_one - j) * dim;
+
+        for (i = 0; i < dim; i += 16){
+            s_precalc = i * dim + j;
+            d_precalc = d_pre + i;
+            dst[d_precalc] = src[s_precalc];
+            dst[d_precalc + 1] = src[s_precalc + d1];
+            dst[d_precalc + 2] = src[s_precalc + d2];
+            dst[d_precalc + 3] = src[s_precalc + d3];
+            dst[d_precalc + 4] = src[s_precalc + d4];
+            dst[d_precalc + 5] = src[s_precalc + d5];
+            dst[d_precalc + 6] = src[s_precalc + d6];
+            dst[d_precalc + 7] = src[s_precalc + d7];
+            dst[d_precalc + 8] = src[s_precalc + d8];
+            dst[d_precalc + 9] = src[s_precalc + d9];
+            dst[d_precalc + 10] = src[s_precalc + d10];
+            dst[d_precalc + 11] = src[s_precalc + d11];
+            dst[d_precalc + 12] = src[s_precalc + d12];
+            dst[d_precalc + 13] = src[s_precalc + d13];
+            dst[d_precalc + 14] = src[s_precalc + d14];
+            dst[d_precalc + 15] = src[s_precalc + d15];
+        }
+    }
 }
 
 char blend_descr[] = "blend: Current working version";

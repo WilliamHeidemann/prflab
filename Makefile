@@ -10,7 +10,7 @@ endif
 
 # Compiler and compilation-flags.
 CC = gcc
-CFLAGS = -Wall -O$(O) -D __O$(O)__
+CFLAGS = -march=native -Wall -O$(O) -D __O$(O)__
 
 # That __On__ is a variable for the C preprocessor.
 # Compiler will pick different hard-coded constants for baseline
@@ -26,5 +26,5 @@ all: driver
 driver:	$(OBJS) fcyc.h clock.h defs.h config.h
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o driver
 
-clean: 
+clean:
 	-rm -f $(OBJS) driver core *~ *.o
