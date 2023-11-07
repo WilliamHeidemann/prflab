@@ -926,7 +926,7 @@ void* blend_thread_function(void *arg) {
     int idx = *(int*)arg;
     int sixteen = idx + 16;
     for (int i = idx; i < sixteen; ++i) {
-        blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
+        //blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
     }
     return NULL;
 }
