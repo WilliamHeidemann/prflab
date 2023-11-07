@@ -952,9 +952,8 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
 
     //for (i = 0; i < dimdim; i += 16) {
         //thread_args[i] = i;
-        thread_args[0] = 0;
         //pthread_create(&threads[i], NULL, blend_thread_function, (void *) &thread_args[i]);
-        pthread_create(&threads[0], NULL, blend_thread_function, (void *) &thread_args[0]);
+        pthread_create(&threads[0], NULL, blend_thread_function, NULL);
     //}
 
     pthread_join(threads[0], NULL);
