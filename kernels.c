@@ -924,7 +924,7 @@ void blend_v(int dim, pixel *src, pixel *dst)
 
 void* blend_thread_function(void *arg) {
     int idx = *(int*)arg;
-    int limit = idx + 64;
+    int limit = idx + global_dim;
 
     for (int i = idx; i < limit; ++i) {
         blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
@@ -936,7 +936,7 @@ void* blend_thread_function(void *arg) {
 
 char blend_v_one_descr[] = "First attempt";
 void blend_v_one(int dim, pixel *src, pixel *dst) {
-    //global_dim = dim;
+    global_dim = dim;
     global_src = src;
     global_dst = dst;
     int dimdim = dim * dim;
@@ -946,7 +946,7 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
     int i;
 
     int arg = 0;
-    for (i = 0; i < dimdim; i += 64) {
+    for (i = 0; i < dimdim; i += dim) {
         thread_args[arg] = i;
         pthread_create(&threads[arg], NULL, blend_thread_function, (void *) &thread_args[arg]);
         arg += 1;
@@ -960,7 +960,7 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
      */
 
     arg = 0;
-    for (i = 0; i < dimdim; i += 64) {
+    for (i = 0; i < dimdim; i += dim) {
         pthread_join(threads[arg], NULL);
         arg += 1;
     }
