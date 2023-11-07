@@ -887,8 +887,8 @@ char blend_one_descr[] = "Copy logic of rotate";
 void blend_one(register int dim, register pixel *src, register pixel *dst) {
     register int i, j;
 
-    for (j = 0; j < dim; j++){
-        for (i = 0; i < dim; i++){
+    for (i = 0; i < dim; i++){
+        for (j = 0; j < dim; j++){
             blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
         }
     }
