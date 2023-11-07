@@ -958,7 +958,8 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
      */
 
     for (i = 0; i < global_dim * global_dim; ++i) {
-        blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
+        //blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
+        blend_pixel(&src[i], &dst[i], &bgc); // `blend_pixel` defined in blend.c
     }
 
     /*
