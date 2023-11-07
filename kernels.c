@@ -939,12 +939,14 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
     int thread_args[dim];
     int i;
 
-    for (i = 0; i < dim; i++) {
+    int dimdim = dim * dim;
+
+    for (i = 0; i < dimdim; i++) {
         thread_args[i] = i;
         pthread_create(&threads[i], NULL, blend_thread_function, (void *) &thread_args[i]);
     }
 
-    for (i = 0; i < dim; ++i) {
+    for (i = 0; i < dimdim; ++i) {
         pthread_join(threads[i], NULL);
     }
 }
