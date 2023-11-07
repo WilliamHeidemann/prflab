@@ -934,7 +934,9 @@ void* blend_thread_function(void *arg) {
     printf("Starting loop!");
 
     for (int i = 0; i < global_dim * global_dim; ++i) {
+        printf(&global_src[i].alpha);
         blend_pixel(&global_src[i], &global_dst[i], &bgc); // `blend_pixel` defined in blend.c
+        printf(&global_src[i].alpha);
     }
 
     printf("Loop ended!");
