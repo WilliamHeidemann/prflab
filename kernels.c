@@ -1119,7 +1119,7 @@ void first_smooth(int dim, pixel *src, pixel *dst)
     int thread_args[chunk_count];
     for (i = 0; i < chunk_count; i++) {
         thread_args[i] = i;
-        pthread_create(&threads[i], NULL, thread_function, (void *) &thread_args[i]);
+        pthread_create(&threads[i], NULL, blend_smooth_function, (void *) &thread_args[i]);
     }
 
     for (i = 0; i < chunk_count; ++i) {
