@@ -1069,6 +1069,7 @@ void register_blend_v_functions() {
     add_blend_v_function(&blend_v, blend_v_descr);
     add_blend_v_function(&blend_v_one, blend_v_one_descr);
     //add_blend_v_function(&blend_v_intrinsics_one, blend_v_intrinsics_one_descr);
+    add_blend_v_function(&blend_v_2, blend_v_descr);
     /* ... Register additional test functions here */
 }
 
