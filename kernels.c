@@ -960,7 +960,7 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
     }
 }
 
-
+/*
 char blend_v_intrinsics_one_descr[] = "First attempt using intrinsics";
 void blend_v_intrinsics_one(int dim, pixel *src, pixel *dst) {
     int pixel_count = dim * dim;
@@ -1052,7 +1052,7 @@ void blend_v_2(int dim, pixel *src, pixel *dst) {
     }
 }
 
-
+*/
 //int i, j;
 //for (i = 0; i < dim; i++)
 //for (j = 0; j < dim; j++)
