@@ -1019,12 +1019,13 @@ void blend_v_intrinsics_one(int dim, pixel *src, pixel *dst) {
     }
 
 }
+*/
 
 char blend_v_2_descr[] = "Second attempt";
 void blend_v_2(int dim, pixel *src, pixel *dst) {
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; j += 4) {
-            // Load 8 source pixels into a 256-bit vector
+            // Load 4 source pixels into a 256-bit vector
             __m256i src_pixels = _mm256_load_si256((__m256i*)&src[RIDX(i, j, dim)]);
 
             // Convert 16-bit unsigned shorts to 32-bit floats
@@ -1052,7 +1053,6 @@ void blend_v_2(int dim, pixel *src, pixel *dst) {
     }
 }
 
-*/
 //int i, j;
 //for (i = 0; i < dim; i++)
 //for (j = 0; j < dim; j++)
