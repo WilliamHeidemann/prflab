@@ -11,6 +11,7 @@
 #include "defs.h"
 #include "smooth.h" // helper functions for naive_smooth
 #include "blend.h"  // helper functions for naive_blend
+#include <immintrin.h>
 
 /* 
  * Please fill in the following struct
@@ -934,7 +935,7 @@ void* blend_thread_function(void *arg) {
 }
 
 
-char blend_v_one_descr[] = "First attempt";
+char blend_v_one_descr[] = "Blend multithread without C intrinsics";
 void blend_v_one(int dim, pixel *src, pixel *dst) {
     global_dim = dim;
     global_src = src;
@@ -960,6 +961,105 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
 }
 
 
+char blend_v_intrinsics_one_descr[] = "First attempt using intrinsics";
+void blend_v_intrinsics_one(int dim, pixel *src, pixel *dst) {
+    int pixel_count = dim * dim;
+    const float one_over_255 = 1.0F / 255.0F;
+    __m256 _1_over_255 = _mm256_set1_ps(one_over_255);
+
+    // start for loop for each section of size 256i. Each struct is 64 bits, which means 4 pixels will take up 256 bits.
+    for (int i = 0; i < pixel_count; i += 4) {
+        // fill a vector with alpha values of each pixel. src[i].alpha / 255 = src[i].alpha * 1 / 255 = src[i].alpha * constant_float. A float between 0-1. Name it "alpha"
+        __m256i alpha = _mm256_set_epi16(
+                (short) src[i+0].alpha, (short) src[0].alpha, (short) src[0].alpha, (short) src[0].alpha,
+                (short) src[1].alpha, (short) src[1].alpha, (short) src[1].alpha, (short) src[1].alpha,
+                (short) src[2].alpha, (short) src[2].alpha, (short) src[2].alpha, (short) src[2].alpha,
+                (short) src[3].alpha, (short) src[3].alpha, (short) src[3].alpha, (short) src[3].alpha
+        );
+
+        __m256 alpha_floats = _mm256_cvtepi32_ps(alpha);
+        __m256 alpha_fraction = _mm256_mul_ps(alpha_floats, _1_over_255);
+        __m256i img = _mm256_load_si256((__m256i*) &src[i]); // Maybe src with / without ambersand?
+        __m256 adjusted_src = _mm256_mul_ps(img, alpha_fraction);
+
+        // fill a vector with the background color. Name it "background"
+        //__m256i background = _mm256_set_epi64x(
+        //        *(long*) src,
+        //        *(long*) &src[1],
+        //        *(long*) &src[2],
+        //        *(long*) &src[3]); //__m256i background = _mm256_set1_epi16((short) src->red);
+
+        // fill a vector with the remainder. 1-alpha[i]. Name it "remainder".
+        unsigned short remainder_alpha_0 = 1 - src[0+i].alpha;
+        unsigned short remainder_alpha_1 = 1 - src[1+i].alpha;
+        unsigned short remainder_alpha_2 = 1 - src[2+i].alpha;
+        unsigned short remainder_alpha_3 = 1 - src[3+i].alpha;
+
+        __m256i remainder_alpha = _mm256_set_epi16(
+                (short) remainder_alpha_0, (short) remainder_alpha_0, (short) remainder_alpha_0, (short) remainder_alpha_0,
+                (short) remainder_alpha_1, (short) remainder_alpha_1, (short) remainder_alpha_1, (short) remainder_alpha_1,
+                (short) remainder_alpha_2, (short) remainder_alpha_2, (short) remainder_alpha_2, (short) remainder_alpha_2,
+                (short) remainder_alpha_3, (short) remainder_alpha_3, (short) remainder_alpha_3, (short) remainder_alpha_3
+        );
+
+        __m256 remainder_floats = _mm256_cvtepi32_ps(remainder_alpha);
+        __m256 remainder_fraction = _mm256_mul_ps(remainder_floats, _1_over_255);
+        __m256i background = _mm256_load_si256((__m256i*) &bgc);
+        __m256 adjusted_background = _mm256_mul_ps(img, alpha_fraction);
+
+        // Modify the img such that each rgb value is multiplied by "alpha".
+
+
+        // Modify the background such that each rgb value is multiplied by "remainder".
+
+        // Add together img and background
+
+        // store img in the dst array
+        _mm256_store_si256((__m256i*)dst, img);
+    }
+
+}
+
+char blend_v_2_descr[] = "Second attempt";
+void blend_v_2(int dim, pixel *src, pixel *dst) {
+    for (int i = 0; i < dim; ++i) {
+        for (int j = 0; j < dim; j += 4) {
+            // Load 8 source pixels into a 256-bit vector
+            __m256i src_pixels = _mm256_load_si256((__m256i*)&src[RIDX(i, j, dim)]);
+
+            // Convert 16-bit unsigned shorts to 32-bit floats
+            __m256 src_floats = _mm256_cvtepi32_ps(_mm256_unpacklo_epi16(src_pixels, _mm256_setzero_si256()));
+
+            // Load 8 destination pixels into a 256-bit vector
+            __m256i dst_pixels = _mm256_load_si256((__m256i*)&dst[RIDX(i, j, dim)]);
+
+            // Convert 16-bit unsigned shorts to 32-bit floats
+            __m256 dst_floats = _mm256_cvtepi32_ps(_mm256_unpacklo_epi16(dst_pixels, _mm256_setzero_si256()));
+
+            // Extract alpha and convert to 32-bit floats
+            __m256 alpha = _mm256_cvtepi32_ps(_mm256_and_si256(src_pixels, _mm256_set1_epi32(0xFFFF)));
+
+            // Compute (1 - alpha) for each color channel
+            __m256 one_minus_alpha = _mm256_sub_ps(_mm256_set1_ps(1.0F), alpha);
+
+            // Compute blended color channels
+            __m256 blended_colors = _mm256_blendv_ps(dst_floats, src_floats, alpha);
+
+            // Convert back to integer and store the result
+            __m256i result_pixels = _mm256_cvtps_epi32(blended_colors);
+            _mm256_store_si256((__m256i*)&dst[RIDX(i, j, dim)], result_pixels);
+        }
+    }
+}
+
+
+//int i, j;
+//for (i = 0; i < dim; i++)
+//for (j = 0; j < dim; j++)
+//blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
+
+
+
 /*
  * register_blend_v_functions - Register all of your different versions
  *     of the blend_v kernel with the driver by calling the
@@ -968,6 +1068,7 @@ void blend_v_one(int dim, pixel *src, pixel *dst) {
 void register_blend_v_functions() {
     add_blend_v_function(&blend_v, blend_v_descr);
     add_blend_v_function(&blend_v_one, blend_v_one_descr);
+    add_blend_v_function(&blend_v_intrinsics_one, blend_v_intrinsics_one_descr);
     /* ... Register additional test functions here */
 }
 
@@ -990,6 +1091,42 @@ void naive_smooth(int dim, pixel *src, pixel *dst)
 	    dst[RIDX(i, j, dim)] = avg(dim, i, j, src); // `avg` defined in smooth.c
 }
 
+void* blend_smooth_function(void *arg) {
+    int idx = *(int*)arg;
+    int s, d;
+    int block_start = 16 * idx;
+    int next_block_start = 16 * (idx + 1);
+
+    for (int j = 0; j < global_dim; ++j) {
+        for (int i = block_start; i < next_block_start; ++i) {
+            global_dst[RIDX(i, j, global_dim)] = avg(global_dim, i, j, global_src);
+        }
+    }
+
+    return NULL;
+}
+
+char first_smooth_descr[] = "First attempt";
+void first_smooth(int dim, pixel *src, pixel *dst)
+{
+    global_src = src;
+    global_dst = dst;
+    global_dim = dim;
+
+    int i;
+    int chunk_count = dim / 16;
+    pthread_t threads[chunk_count];
+    int thread_args[chunk_count];
+    for (i = 0; i < chunk_count; i++) {
+        thread_args[i] = i;
+        pthread_create(&threads[i], NULL, thread_function, (void *) &thread_args[i]);
+    }
+
+    for (i = 0; i < chunk_count; ++i) {
+        pthread_join(threads[i], NULL);
+    }
+}
+
 char smooth_descr[] = "smooth: Current working version";
 void smooth(int dim, pixel *src, pixel *dst)
 {
@@ -1004,5 +1141,6 @@ void smooth(int dim, pixel *src, pixel *dst)
 
 void register_smooth_functions() {
     add_smooth_function(&naive_smooth, naive_smooth_descr);
+    add_smooth_function(&first_smooth, first_smooth_descr);
     /* ... Register additional test functions here */
 }
