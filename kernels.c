@@ -1025,7 +1025,7 @@ char blend_v_2_descr[] = "Second attempt";
 void blend_v_2(int dim, pixel *src, pixel *dst) {
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; j += 4) {
-            // Load 4 source pixels into a 256-bit vector
+            // Load 8 source pixels into a 256-bit vector
             __m256i src_pixels = _mm256_load_si256((__m256i*)&src[RIDX(i, j, dim)]);
 
             // Convert 16-bit unsigned shorts to 32-bit floats
@@ -1040,14 +1040,23 @@ void blend_v_2(int dim, pixel *src, pixel *dst) {
             // Extract alpha and convert to 32-bit floats
             __m256 alpha = _mm256_cvtepi32_ps(_mm256_and_si256(src_pixels, _mm256_set1_epi32(0xFFFF)));
 
+            // Normalize alpha to the range [0, 1]
+            alpha = _mm256_div_ps(alpha, _mm256_set1_ps(65535.0f));
+
             // Compute (1 - alpha) for each color channel
             __m256 one_minus_alpha = _mm256_sub_ps(_mm256_set1_ps(1.0F), alpha);
 
             // Compute blended color channels
-            __m256 blended_colors = _mm256_blendv_ps(dst_floats, src_floats, alpha);
+            __m256 blended_colors = _mm256_add_ps(_mm256_mul_ps(alpha, src_floats),
+                                                  _mm256_mul_ps(one_minus_alpha, dst_floats));
 
             // Convert back to integer and store the result
             __m256i result_pixels = _mm256_cvtps_epi32(blended_colors);
+
+            // Convert 32-bit integers to 16-bit unsigned shorts
+            result_pixels = _mm256_packs_epi32(result_pixels, _mm256_setzero_si256());
+
+            // Store the result
             _mm256_store_si256((__m256i*)&dst[RIDX(i, j, dim)], result_pixels);
         }
     }
