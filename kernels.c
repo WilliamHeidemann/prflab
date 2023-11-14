@@ -1108,8 +1108,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
 
             // Multiply each color with the correct alpha fraction.
-            __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_256, lower_alpha);
-            __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_upper_256, upper_alpha);
+            __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_float, lower_alpha);
+            __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_upper_float, upper_alpha);
 
             // Create remainder vector (1-a)
             __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
