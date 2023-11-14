@@ -1140,8 +1140,11 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
             float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
             float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
-            __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
-            __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
+            //__m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
+            //__m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
+            // snd try:
+            __m256 pix2_alpha_upper = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
+            __m256 pix2_alpha_lower = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
 
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
