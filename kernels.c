@@ -12,6 +12,7 @@
 #include "smooth.h" // helper functions for naive_smooth
 #include "blend.h"  // helper functions for naive_blend
 #include <immintrin.h>
+#include <limits.h>
 
 /* 
  * Please fill in the following struct
@@ -1088,8 +1089,11 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
             __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
             __m256i pix2_lower_256 = _mm256_castsi128_si256(pix2_lower); // [ 0000000 rgba rgba ]
-            __m256i pix2_higher_256 = _mm256_castsi128_si256(pix2_upper); // ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
+            __m256i pix2_upper_256 = _mm256_castsi128_si256(pix2_upper); // ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
 
+            // Convert pixels of integers to floats
+            __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
+            __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
@@ -1105,7 +1109,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Multiply each color with the correct alpha fraction.
             __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_256, lower_alpha);
-            __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_higher_256, upper_alpha);
+            __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_upper_256, upper_alpha);
 
             // Create remainder vector (1-a)
             __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
