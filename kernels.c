@@ -1136,9 +1136,6 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             //print_floats(pix2_upper_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
-            printf("%s", "a1 as short: ");
-            printf("%d", src[RIDX(i, j+0, dim)].alpha);
-            printf("%s", "\n");
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
             printf("%s", "a1 as float: ");
             printf("%f", a1);
@@ -1147,6 +1144,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
             float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
             __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
+            printf("%s", "pix2 alpha lower: ");
+            print_floats(pix2_alpha_lower);
             __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
 
             // Create alpha-fraction vector.
