@@ -1093,7 +1093,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             printf("Contents of __m256i: [");
             for (int p = 0; p < 16; ++p) {
-                printf("%d ", arr[i]);
+                printf("%d ", arr[p]);
             }
             printf("]\n");
 
