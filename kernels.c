@@ -1132,9 +1132,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
-            printf("%s", "Initial values: ");
-            print_floats(pix2_upper_float);
-            //print_floats(pix2_lower_float);
+            //printf("%s", "Initial values: ");
+            //print_floats(pix2_upper_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
@@ -1147,14 +1146,14 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
             __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
-            printf("%s", "Alpha value: ");
-            print_floats(upper_alpha);
+            //printf("%s", "Alpha value: ");
+            //print_floats(upper_alpha);
 
             // Multiply each color with the correct alpha fraction.
             __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_float, lower_alpha);
             __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_upper_float, upper_alpha);
-            printf("%s", "Adjusted for alpha: ");
-            print_floats(pix2_upper_adjusted);
+            //printf("%s", "Adjusted for alpha: ");
+            //print_floats(pix2_upper_adjusted);
 
             // Create remainder vector (1-a)
             __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
@@ -1170,10 +1169,16 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // floats to integers
             __m256i result_lower_i = _mm256_cvtps_epi32(result_lower);
+            printf("%s", "Lower result: \n");
+            print_integers(result_lower_i);
             __m256i result_upper_i = _mm256_cvtps_epi32(result_upper);
+            printf("%s", "Upper result: \n");
+            print_integers(result_upper_i);
 
             // Pack the 32-bit integers into 16-bit integers
             __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
+            printf("%s", "Packed result: \n");
+            print_shorts(result);
 
             // Write to dst
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], result);
