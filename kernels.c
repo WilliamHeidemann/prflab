@@ -1069,6 +1069,18 @@ void blend_v_2(int dim, pixel *src, pixel *dst) {
 //for (j = 0; j < dim; j++)
 //blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
 
+void print_floats(__m256 values) {
+    float arr[8];
+    //_mm256_storeu_si256((__m256i *)arr, values);
+    _mm256_store_ps((float *) (__m256 *) arr, values);
+
+    printf("Contents of __m256: [");
+    for (int p = 0; p < 8; ++p) {
+        printf("%f ", arr[p]);
+    }
+    printf("]\n");
+}
+
 char blend_v_three_descr[] = "Third Attempt";
 void blend_v_three(int dim, pixel *src, pixel *dst) {
 
@@ -1086,16 +1098,6 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
         for (int j = 0; j < dim; j += 4) {
             __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
 
-
-            int16_t arr[16];
-            _mm256_storeu_si256((__m256i *)arr, pix4);
-
-            printf("Contents of __m256i: [");
-            for (int p = 0; p < 16; ++p) {
-                printf("%d ", arr[p]);
-            }
-            printf("]\n");
-
             // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
             __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
             __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
@@ -1105,6 +1107,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
+            print_floats(pix2_lower_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
