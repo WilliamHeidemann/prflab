@@ -1127,7 +1127,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             //__m256i pix2_upper_256 = _mm256_castsi128_si256(pix2_upper); // [ rgba rgba 00000000 ] ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
             __m256i pix2_lower_256 = _mm256_cvtepi16_epi32(pix2_lower);
             __m256i pix2_upper_256 = _mm256_cvtepi16_epi32(pix2_upper);
-            print_shorts(pix2_lower_256);
+            print_integers(pix2_lower_256);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
