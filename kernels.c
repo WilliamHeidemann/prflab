@@ -13,6 +13,7 @@
 #include "blend.h"  // helper functions for naive_blend
 #include <immintrin.h>
 #include <limits.h>
+#include <stdint.h>
 
 /* 
  * Please fill in the following struct
@@ -1087,7 +1088,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
 
             __m256i my_avx_variable = _mm256_set_epi16(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0); // Example initialization
-            short arr[16];
+            int16_t arr[16];
             _mm256_storeu_si256((__m256i *)arr, my_avx_variable);
 
             printf("Contents of __m256i: [");
