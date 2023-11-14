@@ -3,7 +3,7 @@
 #include "blend.h"
 
 void blend_pixel(pixel* s, pixel* d, pixel* b) {
-    float a = s->alpha / USHRT_MAX;
+    float a = ( (float)(s->alpha) ) / USHRT_MAX;
     
     d->red   = (a * s->red  ) + ( (1 - a) * b->red  );
     d->green = (a * s->green) + ( (1 - a) * b->green);
