@@ -1137,19 +1137,16 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
-            printf("%s", "a1 as float: ");
-            printf("%f", a1);
-            printf("%s", "\n");
             float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
             float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
             float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
             __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
-            printf("%s", "pix2 alpha lower: ");
-            print_floats(pix2_alpha_lower);
             __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
 
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
+            printf("%s", "lower alpha:");
+            print_floats(lower_alpha);
             __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
             //printf("%s", "Alpha value: ");
             //print_floats(upper_alpha);
@@ -1162,6 +1159,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Create remainder vector (1-a)
             __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
+            printf("%s", "remainder lower:");
+            print_floats(remainder_lower);
             __m256 remainder_upper = _mm256_sub_ps(ones, upper_alpha);
 
             // Multiply background with alpha remainder
