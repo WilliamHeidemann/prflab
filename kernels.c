@@ -1119,21 +1119,15 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
         for (int j = 0; j < dim; j += 4) {
             __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
 
-            //print_shorts(pix4);
             // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
             __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
             __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
-            //__m256i pix2_lower_256 = _mm256_castsi128_si256(pix2_lower); // [ 00000000 rgba rgba ]
-            //__m256i pix2_upper_256 = _mm256_castsi128_si256(pix2_upper); // [ rgba rgba 00000000 ] ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
             __m256i pix2_lower_256 = _mm256_cvtepu16_epi32(pix2_lower);
             __m256i pix2_upper_256 = _mm256_cvtepu16_epi32(pix2_upper);
-            //print_integers(pix2_lower_256);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
-            //printf("%s", "Initial values: ");
-            //print_floats(pix2_upper_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
@@ -1145,22 +1139,14 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
-            printf("%s", "lower alpha:");
-            print_floats(lower_alpha);
             __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
-            //printf("%s", "Alpha value: ");
-            //print_floats(upper_alpha);
 
             // Multiply each color with the correct alpha fraction.
             __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_float, lower_alpha);
             __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_upper_float, upper_alpha);
-            //printf("%s", "Adjusted for alpha: ");
-            //print_floats(pix2_upper_adjusted);
 
             // Create remainder vector (1-a)
             __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
-            printf("%s", "remainder lower:");
-            print_floats(remainder_lower);
             __m256 remainder_upper = _mm256_sub_ps(ones, upper_alpha);
 
             // Multiply background with alpha remainder
@@ -1173,20 +1159,14 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // floats to integers
             __m256i result_lower_i = _mm256_cvtps_epi32(result_lower);
-            //printf("%s", "\nLower result: \n");
-            //print_integers(result_lower_i);
             __m256i result_upper_i = _mm256_cvtps_epi32(result_upper);
-            //printf("%s", "\nUpper result: \n");
-            //print_integers(result_upper_i);
 
             // Pack the 32-bit integers into 16-bit integers
             __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
             __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3,1,2,0));
-            //printf("%s", "\nPacked permuted shuffled result: \n");
-            //print_shorts(permuted_result);
 
             // Write to dst
-            _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], result);
+            _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], permuted_result);
             dst[RIDX(i,j+0,dim)].alpha = USHRT_MAX;
             dst[RIDX(i,j+1,dim)].alpha = USHRT_MAX;
             dst[RIDX(i,j+2,dim)].alpha = USHRT_MAX;
