@@ -1132,6 +1132,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
+            printf("%s", "Initial values: ");
+            print_floats(pix2_upper_float);
             //print_floats(pix2_lower_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
@@ -1145,11 +1147,13 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
             __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
-            print_floats(upper_alpha);
+            printf("%s", "Alpha value: ");
 
             // Multiply each color with the correct alpha fraction.
             __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_float, lower_alpha);
             __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_upper_float, upper_alpha);
+            printf("%s", "Adjusted for alpha: ");
+            print_floats(pix2_upper_adjusted);
 
             // Create remainder vector (1-a)
             __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
