@@ -1085,6 +1085,15 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
         for (int j = 0; j < dim; j += 4) {
             __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
 
+            short arr[16];
+            _mm256_storeu_si256((__m256i *)arr, pix4);
+
+            printf("Contents of __m256i: [");
+            for (int p = 0; p < 16; ++p) {
+                printf("%d ", arr[i]);
+            }
+            printf("]\n");
+
             // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
             __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
             __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
@@ -1132,6 +1141,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Write to dst
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], result);
+            dst[RIDX(i,j,dim)].alpha = USHRT_MAX;
         }
     }
 
