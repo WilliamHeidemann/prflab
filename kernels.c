@@ -1081,7 +1081,7 @@ void print_floats(__m256 values) {
 }
 
 void print_shorts(__m256i values) {
-    int16_t arr[16];
+    unsigned short arr[16];
     _mm256_storeu_si256((__m256i *) arr, values);
 
     printf("Contents of __m256: [");
