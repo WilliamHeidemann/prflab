@@ -1139,12 +1139,13 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
             float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
             float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
-            __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, (float)USHRT_MAX, a2, a2, a2, (float)USHRT_MAX);
-            __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, (float)USHRT_MAX, a4, a4, a4, (float)USHRT_MAX);
+            __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
+            __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
 
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
             __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
+            print_floats(upper_alpha);
 
             // Multiply each color with the correct alpha fraction.
             __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_float, lower_alpha);
@@ -1186,10 +1187,10 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
  *     add_blend_function() for each test function.
  */
 void register_blend_v_functions() {
-    add_blend_v_function(&blend_v, blend_v_descr);
-    add_blend_v_function(&blend_v_one, blend_v_one_descr);
+    //add_blend_v_function(&blend_v, blend_v_descr);
+    //add_blend_v_function(&blend_v_one, blend_v_one_descr);
     //add_blend_v_function(&blend_v_intrinsics_one, blend_v_intrinsics_one_descr);
-    add_blend_v_function(&blend_v_2, blend_v_descr);
+    //add_blend_v_function(&blend_v_2, blend_v_descr);
     add_blend_v_function(&blend_v_three, blend_v_three_descr);
     /* ... Register additional test functions here */
 }
