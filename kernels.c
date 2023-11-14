@@ -1108,8 +1108,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
     // needed for setting alpha = USHRT_MAX in dst at the very end of the loop.
     const __m256 ones = _mm256_set1_ps(1.0F);
     // needed to convert alpha to unit-interval.
-    const __m256  one_over_255_vector = _mm256_setr_ps( 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
-                                         1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX );
+    const __m256  one_over_255_vector = _mm256_setr_ps( 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX,
+                                         1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX );
     // KNOWN ON FUNCTION ENTRY :
     // the b       term in b.c - a.a * (b/MAX).
     const __m256  bgc_vector   = _mm256_setr_ps( bgc.red, bgc.green, bgc.blue, 0.0F, bgc.red, bgc.green, bgc.blue,  0.0F );
@@ -1189,7 +1189,6 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             dst[RIDX(i,j+3,dim)].alpha = USHRT_MAX;
         }
     }
-
 }
 
 /*
