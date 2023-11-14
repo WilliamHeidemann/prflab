@@ -1067,7 +1067,71 @@ void blend_v_2(int dim, pixel *src, pixel *dst) {
 //for (j = 0; j < dim; j++)
 //blend_pixel(&src[RIDX(i, j, dim)], &dst[RIDX(i, j, dim)], &bgc); // `blend_pixel` defined in blend.c
 
+char blend_v_three_descr[] = "Third Attempt";
+void blend_v_three(int dim, pixel *src, pixel *dst) {
 
+    // needed for setting alpha = USHRT_MAX in dst at the very end of the loop.
+    const __m256i ones = _mm256_set1_epi64x (-1);
+    // needed to convert alpha to unit-interval.
+    const __m256  one_over_255_vector = _mm256_setr_ps( 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
+                                         1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX );
+    // KNOWN ON FUNCTION ENTRY :
+    // the b       term in b.c - a.a * (b/MAX).
+    const __m256  bgc_vector   = _mm256_setr_ps( bgc.red, bgc.green, bgc.blue, 0.0F, bgc.red, bgc.green, bgc.blue,  0.0F );
+
+
+    for (int i = 0; i < dim; ++i) {
+        for (int j = 0; j < dim; j += 4) {
+            __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
+
+            // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
+            __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
+            __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
+            __m256i pix2_lower_256 = _mm256_castsi128_si256(pix2_lower); // [ 0000000 rgba rgba ]
+            __m256i pix2_higher_256 = _mm256_castsi128_si256(pix2_upper); // ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
+
+
+            // Create alpha vector. One for lower 2 pixels, one for higher 2.
+            float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
+            float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
+            float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
+            float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
+            __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, (float)USHRT_MAX, a2, a2, a2, (float)USHRT_MAX);
+            __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, (float)USHRT_MAX, a4, a4, a4, (float)USHRT_MAX);
+
+            // Create alpha-fraction vector.
+            __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
+            __m256 upper_alpha = _mm256_mul_ps(pix2_alpha_upper, one_over_255_vector);
+
+            // Multiply each color with the correct alpha fraction.
+            __m256 pix2_lower_adjusted = _mm256_mul_ps(pix2_lower_256, lower_alpha);
+            __m256 pix2_upper_adjusted = _mm256_mul_ps(pix2_higher_256, upper_alpha);
+
+            // Create remainder vector (1-a)
+            __m256 remainder_lower = _mm256_sub_ps(ones, lower_alpha);
+            __m256 remainder_upper = _mm256_sub_ps(ones, upper_alpha);
+
+            // Multiply background with alpha remainder
+            __m256 adjusted_background_lower = _mm256_mul_ps(bgc_vector, remainder_lower);
+            __m256 adjusted_background_upper = _mm256_mul_ps(bgc_vector, remainder_upper);
+
+            // Add together foreground and background
+            __m256 result_lower = _mm256_add_ps(adjusted_background_lower, pix2_lower_adjusted);
+            __m256 result_upper = _mm256_add_ps(adjusted_background_upper, pix2_upper_adjusted);
+
+            // floats to integers
+            __m256i result_lower_i = _mm256_cvtps_epi32(result_lower);
+            __m256i result_upper_i = _mm256_cvtps_epi32(result_upper);
+
+            // Pack the 32-bit integers into 16-bit integers
+            __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
+
+            // Write to dst
+            _mm256_store_si256 ( (__m256i*) dst, result);
+        }
+    }
+
+}
 
 /*
  * register_blend_v_functions - Register all of your different versions
@@ -1079,6 +1143,7 @@ void register_blend_v_functions() {
     add_blend_v_function(&blend_v_one, blend_v_one_descr);
     //add_blend_v_function(&blend_v_intrinsics_one, blend_v_intrinsics_one_descr);
     add_blend_v_function(&blend_v_2, blend_v_descr);
+    add_blend_v_function(&blend_v_three, blend_v_three_descr);
     /* ... Register additional test functions here */
 }
 
