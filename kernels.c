@@ -1120,13 +1120,14 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
 
             print_shorts(pix4);
-
             // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
             __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
             __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
-            __m256i pix2_lower_256 = _mm256_castsi128_si256(pix2_lower); // [ 00000000 rgba rgba ]
-            __m256i pix2_upper_256 = _mm256_castsi128_si256(pix2_upper); // [ rgba rgba 00000000 ] ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
-            print_integers(pix2_lower_256);
+            //__m256i pix2_lower_256 = _mm256_castsi128_si256(pix2_lower); // [ 00000000 rgba rgba ]
+            //__m256i pix2_upper_256 = _mm256_castsi128_si256(pix2_upper); // [ rgba rgba 00000000 ] ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
+            __m256i pix2_lower_256 = _mm256_cvtepi16_epi32(pix2_lower);
+            __m256i pix2_upper_256 = _mm256_cvtepi16_epi32(pix2_upper);
+            print_shorts(pix2_lower_256);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
