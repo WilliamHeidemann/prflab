@@ -1117,7 +1117,16 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; j += 4) {
-            __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
+            __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]); // [ rgba rgba rgba rgba ]
+            printf("%s", "\nRed [0] [1] [2] [3]\n: ");
+            printf("%d\t%d\t%d\t%d", src[RIDX(i,j+0,dim)].red, src[RIDX(i,j+0,dim)].green, src[RIDX(i,j+0,dim)].blue, src[RIDX(i,j+0,dim)].alpha);
+            printf("%s", "\n: ");
+            printf("%d\t%d\t%d\t%d", src[RIDX(i,j+1,dim)].red, src[RIDX(i,j+1,dim)].green, src[RIDX(i,j+1,dim)].blue, src[RIDX(i,j+1,dim)].alpha);
+            printf("%s", "\n: ");
+            printf("%d\t%d\t%d\t%d", src[RIDX(i,j+2,dim)].red, src[RIDX(i,j+2,dim)].green, src[RIDX(i,j+2,dim)].blue, src[RIDX(i,j+2,dim)].alpha);
+            printf("%s", "\n: ");
+            printf("%d\t%d\t%d\t%d", src[RIDX(i,j+3,dim)].red, src[RIDX(i,j+3,dim)].green, src[RIDX(i,j+3,dim)].blue, src[RIDX(i,j+3,dim)].alpha);
+            printf("%s", "\n ");
 
             // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
             __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
@@ -1167,15 +1176,6 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Write to dst
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], permuted_result);
-            printf("%s", "\nRed [0] [1] [2] [3]\n: ");
-            printf("%d", dst[RIDX(i,j+0,dim)].red);
-            printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+1,dim)].red);
-            printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+2,dim)].red);
-            printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].red);
-            printf("%s", "\n ");
             dst[RIDX(i,j+0,dim)].alpha = USHRT_MAX;
             dst[RIDX(i,j+1,dim)].alpha = USHRT_MAX;
             dst[RIDX(i,j+2,dim)].alpha = USHRT_MAX;
