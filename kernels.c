@@ -1167,7 +1167,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Write to dst
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], permuted_result);
-            printf("%s", "\nAfter:\n ");
+            printf("%s", "\nAfter\n: ");
             printf("%d", dst[RIDX(i,j+0,dim)].red);
             printf("%s", "\n: ");
             printf("%d", dst[RIDX(i,j+1,dim)].green);
