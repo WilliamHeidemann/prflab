@@ -1107,6 +1107,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
     // needed for setting alpha = USHRT_MAX in dst at the very end of the loop.
     const __m256 ones = _mm256_set1_ps(1.0F);
+    print_floats(ones);
     // needed to convert alpha to unit-interval.
     const __m256  one_over_255_vector = _mm256_setr_ps( 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
                                          1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX );
@@ -1127,12 +1128,12 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             //__m256i pix2_upper_256 = _mm256_castsi128_si256(pix2_upper); // [ rgba rgba 00000000 ] ASSUMED TO BE CORRECT. MAY BE WRONG!!!!
             __m256i pix2_lower_256 = _mm256_cvtepu16_epi32(pix2_lower);
             __m256i pix2_upper_256 = _mm256_cvtepu16_epi32(pix2_upper);
-            print_integers(pix2_lower_256);
+            //print_integers(pix2_lower_256);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
-            print_floats(pix2_lower_float);
+            //print_floats(pix2_lower_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
