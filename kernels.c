@@ -1166,25 +1166,16 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3,1,2,0));
 
             // Write to dst
-            printf("%s", "\n\nBefore: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].red);
-            printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].green);
-            printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].blue);
-            printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].alpha);
-            printf("%s", "\n: ");
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], permuted_result);
-            printf("%s", "\nAfter: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].red);
+            printf("%s", "\nAfter:\n ");
+            printf("%d", dst[RIDX(i,j+0,dim)].red);
             printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].green);
+            printf("%d", dst[RIDX(i,j+1,dim)].green);
             printf("%s", "\n: ");
-            printf("%d", dst[RIDX(i,j+3,dim)].blue);
+            printf("%d", dst[RIDX(i,j+2,dim)].blue);
             printf("%s", "\n: ");
             printf("%d", dst[RIDX(i,j+3,dim)].alpha);
-            printf("%s", "\n: ");
+            printf("%s", "\n ");
             dst[RIDX(i,j+0,dim)].alpha = USHRT_MAX;
             dst[RIDX(i,j+1,dim)].alpha = USHRT_MAX;
             dst[RIDX(i,j+2,dim)].alpha = USHRT_MAX;
