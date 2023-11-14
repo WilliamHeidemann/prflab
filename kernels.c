@@ -1140,8 +1140,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
             float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
             float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
-            __m256 pix2_alpha_lower = _mm256_setr_ps( a2, a2, a2, a2, a1, a1, a1, a1);
-            __m256 pix2_alpha_upper = _mm256_setr_ps( a4, a4, a4, a4, a3, a3, a3, a3);
+            __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
+            __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
 
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
@@ -1176,7 +1176,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             print_integers(result_upper_i);
 
             // Pack the 32-bit integers into 16-bit integers
-            __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
+            __m256i result = _mm256_packs_epi32(result_upper_i, result_lower_i);
             __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3,1,2,0));
             printf("%s", "\nPacked permuted shuffled result: \n");
             print_shorts(permuted_result);
