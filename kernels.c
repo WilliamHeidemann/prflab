@@ -1169,16 +1169,17 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // floats to integers
             __m256i result_lower_i = _mm256_cvtps_epi32(result_lower);
-            printf("%s", "Lower result: \n");
+            printf("%s", "\nLower result: \n");
             print_integers(result_lower_i);
             __m256i result_upper_i = _mm256_cvtps_epi32(result_upper);
-            printf("%s", "Upper result: \n");
+            printf("%s", "\nUpper result: \n");
             print_integers(result_upper_i);
 
             // Pack the 32-bit integers into 16-bit integers
             __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
-            printf("%s", "Packed result: \n");
-            print_shorts(result);
+            __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3,1,2,0));
+            printf("%s", "\nPacked permuted shuffled result: \n");
+            print_shorts(permuted_result);
 
             // Write to dst
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], result);
