@@ -1085,8 +1085,10 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
         for (int j = 0; j < dim; j += 4) {
             __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]);
 
+
+            __m256i my_avx_variable = _mm256_set_epi16(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0); // Example initialization
             short arr[16];
-            _mm256_storeu_si256((__m256i *)arr, pix4);
+            _mm256_storeu_si256((__m256i *)arr, my_avx_variable);
 
             printf("Contents of __m256i: [");
             for (int p = 0; p < 16; ++p) {
