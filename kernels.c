@@ -1131,7 +1131,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
 
             // Write to dst
-            _mm256_store_si256 ( (__m256i*) dst, result);
+            _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], result);
         }
     }
 
