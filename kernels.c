@@ -1108,8 +1108,8 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
     // needed for setting alpha = USHRT_MAX in dst at the very end of the loop.
     const __m256 ones = _mm256_set1_ps(1.0F);
     // needed to convert alpha to unit-interval.
-    const __m256  one_over_255_vector = _mm256_setr_ps( 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX,
-                                         1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX );
+    const __m256  one_over_255_vector = _mm256_setr_ps( 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
+                                         1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX );
     // KNOWN ON FUNCTION ENTRY :
     // the b       term in b.c - a.a * (b/MAX).
     const __m256  bgc_vector   = _mm256_setr_ps( bgc.red, bgc.green, bgc.blue, 0.0F, bgc.red, bgc.green, bgc.blue,  0.0F );
@@ -1136,7 +1136,13 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             //print_floats(pix2_upper_float);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
+            printf("%s", "a1 as short: ");
+            printf("%d", src[RIDX(i, j+0, dim)].alpha);
+            printf("%s", "\n");
             float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
+            printf("%s", "a1 as float: ");
+            printf("%f", a1);
+            printf("%s", "\n");
             float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
             float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
             float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
@@ -1169,17 +1175,17 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // floats to integers
             __m256i result_lower_i = _mm256_cvtps_epi32(result_lower);
-            printf("%s", "\nLower result: \n");
-            print_integers(result_lower_i);
+            //printf("%s", "\nLower result: \n");
+            //print_integers(result_lower_i);
             __m256i result_upper_i = _mm256_cvtps_epi32(result_upper);
-            printf("%s", "\nUpper result: \n");
-            print_integers(result_upper_i);
+            //printf("%s", "\nUpper result: \n");
+            //print_integers(result_upper_i);
 
             // Pack the 32-bit integers into 16-bit integers
             __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
             __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3,1,2,0));
-            printf("%s", "\nPacked permuted shuffled result: \n");
-            print_shorts(permuted_result);
+            //printf("%s", "\nPacked permuted shuffled result: \n");
+            //print_shorts(permuted_result);
 
             // Write to dst
             _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], result);
