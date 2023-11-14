@@ -1071,7 +1071,7 @@ char blend_v_three_descr[] = "Third Attempt";
 void blend_v_three(int dim, pixel *src, pixel *dst) {
 
     // needed for setting alpha = USHRT_MAX in dst at the very end of the loop.
-    const __m256i ones = _mm256_set1_epi64x (-1);
+    const __m256 ones = _mm256_set1_ps(1.0F);
     // needed to convert alpha to unit-interval.
     const __m256  one_over_255_vector = _mm256_setr_ps( 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
                                          1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX );
