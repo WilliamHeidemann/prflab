@@ -1074,10 +1074,9 @@ void print_floats(__m256 values) {
     _mm256_store_ps((float *) (__m256 *) arr, values);
 
     printf("Contents of __m256: [");
-    printf("%f ", arr[0]);
-   /* for (int p = 0; p < 8; ++p) {
+    for (int p = 0; p < 8; ++p) {
         printf("%f ", arr[p]);
-   }*/
+    }
     printf("]\n");
 }
 
@@ -1086,10 +1085,9 @@ void print_shorts(__m256i values) {
     _mm256_storeu_si256((__m256i *) arr, values);
 
     printf("Contents of __m256: [");
-    printf("%d ", arr[0]);
-    /* for (int p = 0; p < 16; ++p) {
-         printf("%f ", arr[p]);
-    }*/
+    for (int p = 0; p < 16; ++p) {
+         printf("%d ", arr[p]);
+    }
     printf("]\n");
 }
 
