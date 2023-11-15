@@ -1127,7 +1127,6 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             // Pad every 16 bit with 16 0s in front to get 32-bit integers. This will take double the space.
             __m256i pix2_lower = _mm256_unpacklo_epi16(pix4, zero_vector);
             __m256i pix2_upper = _mm256_unpackhi_epi16(pix4, zero_vector);
-            print_integers(pix2_lower);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower);
@@ -1167,7 +1166,6 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Pack the 32-bit integers into 16-bit integers
             __m256i result = _mm256_packus_epi32(result_lower_i, result_upper_i);
-            //__m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3, 1, 2, 0));
 
             // Write to dst
             _mm256_store_si256((__m256i *) &dst[RIDX(i, j, dim)], result);
