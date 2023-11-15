@@ -1108,32 +1108,39 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
     // needed for setting alpha = USHRT_MAX in dst at the very end of the loop.
     const __m256 ones = _mm256_set1_ps(1.0F);
     // needed to convert alpha to unit-interval.
-    const __m256  one_over_255_vector = _mm256_setr_ps( 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
-                                         1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX );
+    const __m256 one_over_255_vector = _mm256_setr_ps(1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
+                                                      1.0F / USHRT_MAX,
+                                                      1.0F / USHRT_MAX, 1.0F / USHRT_MAX, 1.0F / USHRT_MAX,
+                                                      1.0F / USHRT_MAX);
     // KNOWN ON FUNCTION ENTRY :
     // the b       term in b.c - a.a * (b/MAX).
-    const __m256  bgc_vector   = _mm256_setr_ps( bgc.red, bgc.green, bgc.blue, 0.0F, bgc.red, bgc.green, bgc.blue,  0.0F );
+    const __m256 bgc_vector = _mm256_setr_ps(bgc.red, bgc.green, bgc.blue, 0.0F, bgc.red, bgc.green, bgc.blue, 0.0F);
 
+    // [00000000...0]
+    const __m256i zero_vector = _mm256_setzero_si256();
 
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; j += 4) {
-            __m256i pix4 = _mm256_load_si256((__m256i*) &src[RIDX(i, j, dim)]); // [ rgba rgba rgba rgba ]
+            __m256i pix4 = _mm256_load_si256((__m256i *) &src[RIDX(i, j, dim)]); // [ rgba rgba rgba rgba ]
 
             // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
-            __m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
-            __m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
-            __m256i pix2_lower_256 = _mm256_cvtepu16_epi32(pix2_lower);
-            __m256i pix2_upper_256 = _mm256_cvtepu16_epi32(pix2_upper);
+            //__m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
+            //__m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
+            //__m256i pix2_lower_256 = _mm256_cvtepu16_epi32(pix2_lower);
+            //__m256i pix2_upper_256 = _mm256_cvtepu16_epi32(pix2_upper);
+
+            __m256i pix2_lower_256 = _mm256_unpacklo_epi16(pix4, zero_vector);
+            __m256i pix2_upper_256 = _mm256_unpackhi_epi16(pix4, zero_vector);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower_256);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper_256);
 
             // Create alpha vector. One for lower 2 pixels, one for higher 2.
-            float a1 = (float) src[RIDX(i, j+0, dim)].alpha;
-            float a2 = (float) src[RIDX(i, j+1, dim)].alpha;
-            float a3 = (float) src[RIDX(i, j+2, dim)].alpha;
-            float a4 = (float) src[RIDX(i, j+3, dim)].alpha;
+            float a1 = (float) src[RIDX(i, j + 0, dim)].alpha;
+            float a2 = (float) src[RIDX(i, j + 1, dim)].alpha;
+            float a3 = (float) src[RIDX(i, j + 2, dim)].alpha;
+            float a4 = (float) src[RIDX(i, j + 3, dim)].alpha;
             __m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
             __m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
 
@@ -1163,14 +1170,77 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
             // Pack the 32-bit integers into 16-bit integers
             __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
-            __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3,1,2,0));
+            __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3, 1, 2, 0));
 
             // Write to dst
-            _mm256_store_si256 ( (__m256i*) &dst[RIDX(i,j,dim)], permuted_result);
-            dst[RIDX(i,j+0,dim)].alpha = USHRT_MAX;
-            dst[RIDX(i,j+1,dim)].alpha = USHRT_MAX;
-            dst[RIDX(i,j+2,dim)].alpha = USHRT_MAX;
-            dst[RIDX(i,j+3,dim)].alpha = USHRT_MAX;
+            _mm256_store_si256((__m256i *) &dst[RIDX(i, j, dim)], permuted_result);
+            dst[RIDX(i, j + 0, dim)].alpha = USHRT_MAX;
+            dst[RIDX(i, j + 1, dim)].alpha = USHRT_MAX;
+            dst[RIDX(i, j + 2, dim)].alpha = USHRT_MAX;
+            dst[RIDX(i, j + 3, dim)].alpha = USHRT_MAX;
+        }
+    }
+}
+
+// SILKES KODE
+char blend_v_silke_descr[] = "blend_v: Current working version";
+void blend_v_silke(int dim, pixel *src, pixel *dst) {
+    const __m256i zeros = _mm256_setzero_si256();
+    const __m256i max = _mm256_set1_epi32(USHRT_MAX);
+    const __m256 one_div_max = _mm256_setr_ps(1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX,
+                                              1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX, 1.0 / USHRT_MAX);
+    const __m256 fb = _mm256_setr_ps(bgc.red, bgc.green, bgc.blue, 0.0, bgc.red, bgc.green, bgc.blue, 0.0);
+    for (int i = 0; i < dim; ++i) {
+        for (int j = 0; j < dim; j += 4) {
+            __m256i pix4 = _mm256_load_si256((__m256i *) &src[RIDX(i, j, dim)]);
+
+            __m256i firstandthird = _mm256_unpackhi_epi16(pix4, zeros); // 0 and 2 pixels as integers
+
+            __m256i zeroandsecond = _mm256_unpacklo_epi16(pix4, zeros); // 1 and 3 pixels as integers
+
+            __m256 src0 = _mm256_cvtepi32_ps(zeroandsecond); // 0 and 2 as float
+
+            __m256 src1 = _mm256_cvtepi32_ps(firstandthird); // 1 and 3 as float
+
+            __m256i alphavalues0 = _mm256_shuffle_epi32(zeroandsecond, 0b11111111); // 0 and 2 alpha values as int
+
+            __m256i alphavalues1 = _mm256_shuffle_epi32(firstandthird, 0b11111111); // 1 and 3 alpha values as int
+
+            __m256 alpha0asfloat = _mm256_cvtepi32_ps(alphavalues0); // alpha 0 and 2 as float
+
+            __m256 alpha1asfloat = _mm256_cvtepi32_ps(alphavalues1); // alpha 1 and 3 as float
+
+            __m256 onesfloat = _mm256_set_ps(1, 1, 1, 1, 1, 1, 1, 1);
+
+            __m256 alpha0 = _mm256_mul_ps(one_div_max, alpha0asfloat); // !! real alpha value 0 and 2
+
+            __m256 alpha1 = _mm256_mul_ps(one_div_max, alpha1asfloat); // !! real alpha value 1 and 3
+
+            __m256 one_minus_a0 = _mm256_sub_ps(onesfloat, alpha0);
+
+            __m256 one_minus_a1 = _mm256_sub_ps(onesfloat, alpha1);
+
+            __m256 final0float = _mm256_add_ps((_mm256_mul_ps(src0, alpha0)), (_mm256_mul_ps(fb, one_minus_a0)));
+
+            __m256 final1float = _mm256_add_ps((_mm256_mul_ps(src1, alpha1)), (_mm256_mul_ps(fb, one_minus_a1)));
+
+            __m256i final0 = _mm256_cvtps_epi32(final0float);
+
+            __m256i final1 = _mm256_cvtps_epi32(final1float);
+
+            //__m256i f0 = _mm256_blend_epi32(final0, max, 0b10001000);
+
+            //__m256i f1 = _mm256_blend_epi32(final1, max, 0b10001000);
+
+            //__m256i f = _mm256_packus_epi32(f0, f1);
+            __m256i f = _mm256_packus_epi32(final0, final1);
+
+
+            _mm256_store_si256((__m256i *) &dst[RIDX(i, j, dim)], f);
+            dst[RIDX(i, j + 0, dim)].alpha = USHRT_MAX;
+            dst[RIDX(i, j + 1, dim)].alpha = USHRT_MAX;
+            dst[RIDX(i, j + 2, dim)].alpha = USHRT_MAX;
+            dst[RIDX(i, j + 3, dim)].alpha = USHRT_MAX;
         }
     }
 }
