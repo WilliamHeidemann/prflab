@@ -1121,35 +1121,25 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
 
     for (int i = 0; i < dim; ++i) {
         for (int j = 0; j < dim; j += 4) {
-            __m256i pix4 = _mm256_load_si256((__m256i *) &src[RIDX(i, j, dim)]); // [ rgba rgba rgba rgba ]
+            // [ rgba rgba rgba rgba ]
+            __m256i pix4 = _mm256_load_si256((__m256i *) &src[RIDX(i, j, dim)]);
 
-            // Take the lower 128 bits out, so we can extend them to 32-bit floats in a 256 bit vector. Do the same for the higher 128 bits.
-            //__m128i pix2_lower = _mm256_extracti128_si256(pix4, 0); // [64 rgba px1, 64 rgba px2]
-            //__m128i pix2_upper = _mm256_extracti128_si256(pix4, 1); // [64 rgba px3, 64 rgba px4]
-            //__m256i pix2_lower_256 = _mm256_cvtepu16_epi32(pix2_lower);
-            //__m256i pix2_upper_256 = _mm256_cvtepu16_epi32(pix2_upper);
-
+            // Pad every 16 bit with 16 0s in front to get 32-bit integers. This will take double the space.
             __m256i pix2_lower = _mm256_unpacklo_epi16(pix4, zero_vector);
             __m256i pix2_upper = _mm256_unpackhi_epi16(pix4, zero_vector);
+            print_integers(pix2_lower);
 
             // Convert pixels of integers to floats
             __m256 pix2_lower_float = _mm256_cvtepi32_ps(pix2_lower);
             __m256 pix2_upper_float = _mm256_cvtepi32_ps(pix2_upper);
 
-            // Create alpha vector. One for lower 2 pixels, one for higher 2.
-            //float a1 = (float) src[RIDX(i, j + 0, dim)].alpha;
-            //float a2 = (float) src[RIDX(i, j + 1, dim)].alpha;
-            //float a3 = (float) src[RIDX(i, j + 2, dim)].alpha;
-            //float a4 = (float) src[RIDX(i, j + 3, dim)].alpha;
-            //__m256 pix2_alpha_lower = _mm256_setr_ps(a1, a1, a1, a1, a2, a2, a2, a2);
-            //__m256 pix2_alpha_upper = _mm256_setr_ps(a3, a3, a3, a3, a4, a4, a4, a4);
+            // Create alpha vector. One for lower 2 pixels, one for higher 2. Shuffle takes every 4th 32 bits
+            __m256i alpha_lower_int = _mm256_shuffle_epi32(pix2_lower, 0b11111111);
+            __m256i alpha_upper_int = _mm256_shuffle_epi32(pix2_upper, 0b11111111);
 
-            __m256i alpha_lower_int = _mm256_shuffle_epi32(pix2_lower, 0b11111111); // 0 and 2 alpha values as int
-            __m256i alpha_upper_int = _mm256_shuffle_epi32(pix2_upper, 0b11111111); // 1 and 3 alpha values as int
-
-            __m256 pix2_alpha_lower = _mm256_cvtepi32_ps(alpha_lower_int); // alpha 0 and 2 as float
-            __m256 pix2_alpha_upper = _mm256_cvtepi32_ps(alpha_upper_int); // alpha 1 and 3 as float
-
+            // Convert to float
+            __m256 pix2_alpha_lower = _mm256_cvtepi32_ps(alpha_lower_int);
+            __m256 pix2_alpha_upper = _mm256_cvtepi32_ps(alpha_upper_int);
 
             // Create alpha-fraction vector.
             __m256 lower_alpha = _mm256_mul_ps(pix2_alpha_lower, one_over_255_vector);
