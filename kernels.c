@@ -1166,7 +1166,7 @@ void blend_v_three(int dim, pixel *src, pixel *dst) {
             __m256i result_upper_i = _mm256_cvtps_epi32(result_upper);
 
             // Pack the 32-bit integers into 16-bit integers
-            __m256i result = _mm256_packs_epi32(result_lower_i, result_upper_i);
+            __m256i result = _mm256_packus_epi32(result_lower_i, result_upper_i);
             __m256i permuted_result = _mm256_permute4x64_epi64(result, _MM_SHUFFLE(3, 1, 2, 0));
 
             // Write to dst
